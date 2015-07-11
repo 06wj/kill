@@ -106,6 +106,13 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 	        this.stage.addChild(m);
 	        monsterArr.push(m);
 
+
+            var bgTop = new Bitmap({
+                image:resource.get("roadTop"),
+                y:600,
+                pivotY:resource.get("roadTop").height
+            }).addTo(this.stage);
+
         },
     };
 

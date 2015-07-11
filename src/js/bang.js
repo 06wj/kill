@@ -15,15 +15,13 @@ KISSY.add("kill/bang", function(S, resource){
             this.rotation = 0;
             var rotation = properties.rotation;
 
-            this.width = rotation == 90?30:width + 34;
-            this.height = rotation == 0?30:width + 34;
+            this.width = rotation == 90?20:width + 34;
+            this.height = rotation == 0?20:width + 34;
             // this.background = "rgba(0,255,0,.4)"
             this.vx = this.vy = 0;
             this.display = new Container({
-                x:rotation == 90?50:0,
-                y:rotation == 0?-20:0,
-                width:width+34,
-                height:30,
+                x:rotation == 90?43:0,
+                y:rotation == 0?-25:0,
                 rotation:rotation
             });
             this.topContainer = new Container();
@@ -49,14 +47,27 @@ KISSY.add("kill/bang", function(S, resource){
             this.topContainer.addChild(light);
 
             var delay = Math.random() * 1000;
-            Tween.to(light, {
-                x:width
-            },{
-                duration:1000,
-                loop:true,
-                reverse:true,
-                delay:delay
-            });
+            var loopTween = function(){
+                light.y = 18;
+                Tween.to(light, {
+                    x:width
+                },{
+                    duration:1000,
+                    delay:delay,
+                    onComplete:function(){
+                        light.y = 38;
+                        Tween.to(light, {
+                            x:0
+                        },{
+                            duration:1000,
+                            onComplete:function(){
+                                loopTween();
+                            }
+                        });
+                    }
+                });
+            };
+            loopTween();
 
             Tween.to(this.topContainer, {
                 y:5
@@ -74,14 +85,6 @@ KISSY.add("kill/bang", function(S, resource){
                 pivotX:6.5
             });
             this.bottomContainer.addChild(shadow);
-            Tween.to(shadow, {
-                scaleX:1.2
-            },{
-                duration:1000,
-                loop:true,
-                reverse:true,
-                delay:delay
-            });
 
             var shadow = new Bitmap({
                 x:25 + width,
@@ -91,14 +94,6 @@ KISSY.add("kill/bang", function(S, resource){
                 image:resource.get("stick_shadow")
             });
             this.bottomContainer.addChild(shadow);
-            Tween.to(shadow, {
-                scaleX:-1.2
-            },{
-                duration:1000,
-                loop:true,
-                reverse:true,
-                delay:delay
-            });
 
             var start = new Bitmap({
                 x:0,

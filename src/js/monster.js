@@ -107,6 +107,9 @@ KISSY.add("kill/monster", function (S,resource) {
 			this.vx = 2 + Math.random();
 			this.vy = 2 + Math.random();
 
+//			this.vx = 0;
+//			this.vy = 0;
+
 			this.onGoingPoints = [];
 
 			this.r = 10;
@@ -117,6 +120,8 @@ KISSY.add("kill/monster", function (S,resource) {
 				maxY: this.y + this.r
 			}
 
+			this.background = "rgba(0,255,0,.4)"
+
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
 //				["run", "80-87", resource.get("player"), 22, 22, true, 100],
 				["monster1", "0-1", resource.get("monster1"), 36, 40, true, 300]
@@ -124,15 +129,15 @@ KISSY.add("kill/monster", function (S,resource) {
 			this.display = new Hilo.Sprite({
 				frames:textures,
 				loop:true,
-				timeBased:true,
-				scaleX: -1,
-				scaleY:1
+				timeBased:true
 			});
 
 			this.width = 36;
 			this.height = 40;
 			this.pivotX = 18;
 			this.pivotY = 20;
+			this.scaleX =  1;
+			this.scaleY = 1;
 
 			this.addChild(this.display);
 			this.display.play("monster1");
@@ -141,55 +146,155 @@ KISSY.add("kill/monster", function (S,resource) {
 		onUpdate: function () {
 			var that = this;
 
-			_game.bangArr.forEach(function(bang){
-				var left = that.x - that.width/2;
-				var right = that.x + that.width/2;
-				var top = that.y;
-				var bottom = that.y + that.height;
+			var left = that.x - that.width/2;
+			var top = that.y - that.height/2;
+			var right = that.x + that.width/2;
+			var bottom = that.y + that.height/2;
 
-				var bangLeft = bang.x;
-				var bangRight = bang.x + bang.width;
-				var bangTop = bang.y;
-				var bangBottom = bang.y + bang.height;
+			var b = null;
+			_game.bangArr.forEach(function(bang){
 
 				if(bang.hitTestObject(that)){
+					b = bang;
 
-					if((that.x < bangLeft && that.y < bangTop) || (that.x > bangRight && that.y < bangTop) || (that.x > bangRight && that.y > bangBottom) || (that.x > bangRight && that.y < bangTop)){
+					var bangLeft = bang.x;
+					var bangRight = bang.x + bang.width;
+					var bangTop = bang.y;
+					var bangBottom = bang.y + bang.height;
+
+					var A = (right < bangLeft && bottom < bangTop);
+					var B = ( left > bangRight && bottom < bangTop);
+					var C = (left > bangRight && top > bangBottom);
+					var D = (right < bangLeft && top > bangBottom);
+
+					if(!A && !B && !C && !D){
+						if(left < bangLeft){
+							that.x = bangLeft - that.width/2;
+							that.vx = -that.vx;
+							that.scaleX = -that.scaleX;
+						}
+
+						if(top < bangTop){
+							that.y = bangTop - that.height/2;
+							that.vy = -that.vy;
+						}
+
+						if(right > bangRight){
+							that.y = bangRight + that.width/2;
+							that.vx = -that.vx;
+							that.scaleX = -that.scaleX;
+						}
+
+						if(bottom > bangBottom){
+							that.y = bangBottom + that.height/2;
+							that.vy = -that.vy;
+						}
+					}
+					else{
+
+						if(A){
+							that.x = bangLeft - that.width/2;
+							that.y = bangTop - that.height/2;
+						}
+
+						if(B){
+							that.x = bangRight + that.width/2;
+							that.y = bangTop - that.height/2;
+						}
+
+						if(C){
+							that.y = bangBottom + that.height/2;
+							that.x = bangRight + that.width/2;
+						}
+
+						if(D){
+							that.x = bangLeft - that.width/2;
+							that.y = bangBottom + that.height/2;
+						}
+
 						that.vx = -that.vx;
 						that.vy = -that.vy;
 
-						that.display.scaleX = -that.display.scaleX;
+						that.scaleX = -that.scaleX;
 					}
-					else{
-						if(that.x < bangLeft){
-							that.vx = -that.vx;
-							that.display.scaleX = -that.display.scaleX;
-						}
 
-						if(that.y < bangTop){
-							that.vy = -that.vy;
-						}
+					if(left < _game.left){
+						this.x = _game.left + this.width/2;
+						that.vx = - that.vx;
 
-						if(that.x > bangRight){
-							that.vx = -that.vx;
-							that.display.scaleX = -that.display.scaleX;
+						if(b != null){
+							b.x = _game.left + this.width + b.width/2;
 						}
+					}
 
-						if(that.y > bangBottom){
-							that.vy = -that.vy;
+					if(top < _game.top){
+						this.y = _game.top + this.height/2;
+						that.vy = - that.vy;
+
+						if(b != null){
+							b.y = _game.top + this.height + b.height/2;
+						}
+					}
+
+					if(right > _game.right){
+						this.x = _game.right - this.width/2;
+						that.vx = - that.vx;
+
+						if(b != null){
+							b.x = _game.right - this.width - b.width/2;
+						}
+					}
+
+					if(bottom > _game.bottom){
+						this.y = _game.bottom - this.height/2;
+						that.vy = - that.vy;
+
+						if(b != null){
+							b.y = _game.bottom - this.height - b.height/2;
 						}
 					}
 				}
+
+
 			});
 
 
-			if(that.x < _game.left + that.width || that.x > _game.right - that.width){
+			if(left < _game.left){
+				this.x = _game.left + this.width/2;
 				that.vx = - that.vx;
+
+				if(b != null){
+					b.x = _game.left + this.width + b.width/2;
+				}
 			}
 
-			if(that.y > _game.bottom - that.height || that.y < _game.top + that.height){
+			if(top < _game.top){
+				this.y = _game.top + this.height/2;
 				that.vy = - that.vy;
+
+				if(b != null){
+					b.y = _game.top + this.height + b.height/2;
+				}
 			}
+
+			if(right > _game.right){
+				this.x = _game.right - this.width/2;
+				that.vx = - that.vx;
+
+				if(b != null){
+					b.x = _game.right - this.width - b.width/2;
+				}
+			}
+
+			if(bottom > _game.bottom){
+				this.y = _game.bottom - this.height/2;
+				that.vy = - that.vy;
+
+				if(b != null){
+					b.y = _game.bottom - this.height - b.height/2;
+				}
+			}
+
 
 
 			this.x += this.vx;

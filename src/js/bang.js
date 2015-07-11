@@ -17,7 +17,7 @@ KISSY.add("kill/bang", function(S, resource){
 
             this.width = rotation == 90?20:width + 34;
             this.height = rotation == 0?20:width + 34;
-            // this.background = "rgba(0,255,0,.4)"
+            this.background = "rgba(0,255,0,.4)"
             this.vx = this.vy = 0;
             this.display = new Container({
                 x:rotation == 90?43:0,

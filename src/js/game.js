@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config){
+KISSY.add("kill/game", function(S, resource, mediator, config, input){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -10,6 +10,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config){
         init:function(gameContainer){
             this.gameContainer = gameContainer;
             this._bindEvent();
+            input.init();
             resource.load();
         },
         _bindEvent:function(){
@@ -43,5 +44,5 @@ KISSY.add("kill/game", function(S, resource, mediator, config){
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input"]
 });

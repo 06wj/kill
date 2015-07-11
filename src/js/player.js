@@ -25,6 +25,8 @@ KISSY.add("kill/player", function(S, resource, input){
             });
             this.addChild(this.display);
             this.display.play("run");
+
+            this.bangArr = _game.bangArr;
         },
         getInput:function(data){
             return input[data + this.playerNum];

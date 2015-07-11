@@ -8,8 +8,7 @@ KISSY.add("kill/bang", function(){
         Extends:Container,
         constructor:function(properties){
             Bang.superclass.constructor.call(this, properties);
-            this.width = 200;
-            this.height = 20;
+
             this.vx = this.vy = 0;
             this.display = new View({
                 width:this.width,

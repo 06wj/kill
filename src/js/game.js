@@ -36,18 +36,30 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bangArr = this.bangArr = [];
             var bang = window._bang = new Bang({
                 x:200,
-                y:300
+                y:300,
+                width:200,
+                height:20
             });
             this.stage.addChild(bang);
             bangArr.push(bang);
 
+            var bang = window._bang = new Bang({
+                x:700,
+                y:100,
+                width:20,
+                height:300
+            });
+            this.stage.addChild(bang);
+            bangArr.push(bang);
+
+            var playerArr = this.playerArr = [];
             var player = window._player = new Player({
                 x:150,
                 y:200,
                 playerNum:0
             });
             this.stage.addChild(player);
-            player.bangArr = bangArr;
+            playerArr.push(player);
 
             var player = window._player = new Player({
                 x:150,
@@ -55,7 +67,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 playerNum:1
             });
             this.stage.addChild(player);
-            player.bangArr = bangArr;
+            playerArr.push(player);
 
 
 	        var monsterArr = this.monsterArr = [];

@@ -15,14 +15,7 @@ var IDLEDIR = {
 	B:"B"
 }
 
-var Monster = function(x,y){
-	this.x = x;
-	this.y = y;
 
-	this.state = MonsterState.IDLE;
-
-	this.idleDir = IDLEDIR.P;
-}
 
 var MAX_X = 600;
 var MIN_X = 100;
@@ -65,6 +58,24 @@ var getLinePointsByLen = function (line, step) {
 	return points;
 };
 
+var Monster = function(x,y){
+	this.x = x;
+	this.y = y;
+
+	this.state = MonsterState.IDLE;
+
+	this.idleDir = IDLEDIR.P;
+
+
+	this.r = 10;
+	this.collisionArea = {
+		minX : this.x - this.r,
+		maxX : this.x + this.r,
+		minY: this.y - this.r,
+		maxY: this.y + this.r
+	}
+}
+
 Monster.prototype = {
 	constructor: Monster,
 	idle: function(){
@@ -100,7 +111,7 @@ Monster.prototype = {
 				y: Manager.pepole.y
 			}
 
-			this.onGoingPoints = getLinePointsByLen(line,30);
+			this.onGoingPoints = getLinePointsByLen(line,10);
 
 			this.state = MonsterState.ONGOING;
 		}
@@ -132,9 +143,10 @@ Monster.prototype = {
 	draw: function(){
 
 		ctx.strokeStyle = "red";
+		ctx.lineWidth = 1;
 
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
+		ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
 		ctx.stroke();
 		ctx.fill();
 	}

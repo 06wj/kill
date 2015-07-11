@@ -48,6 +48,9 @@ window.onload = function () {
 
 	var m = new Monster(100,100);
 	var n = new Monster(400,400);
+	var o = new Monster(500,500);
+
+	var s = new Stick();
 
 	var frame = 0;
 	function loop() {
@@ -61,6 +64,12 @@ window.onload = function () {
 
 		n.update();
 		n.draw();
+
+		o.update();
+		o.draw();
+
+		s.update();
+		s.draw();
 
 		requestAnimationFrame(loop);
 	}
@@ -76,7 +85,6 @@ window.onload = function () {
 		Manager.pepole.y = e.pageY;
 
 		m.state = MonsterState.BLOODTHIRSTY;
-		n.state = MonsterState.BLOODTHIRSTY;
 	}
 
 	function mouseup(e) {

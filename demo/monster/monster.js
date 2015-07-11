@@ -103,7 +103,7 @@ Monster.prototype = {
 				y: Manager.pepole.y
 			}
 
-			this.onGoingPoints = getLinePointsByLen(line,1);
+			this.onGoingPoints = getLinePointsByLen(line,30);
 
 			this.state = MonsterState.ONGOING;
 		}

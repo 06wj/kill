@@ -3,6 +3,7 @@ KISSY.add("kill/resource", function(S, mediator, config){
     var res = [
         {id:"player", src:"billd.png"},
         {id:"road", src:"road.jpg"},
+        {id:"roadTop", src:"roadTop.png"},
         {id:"stick_light", src:"stick_light.png"},
         {id:"stick_middle", src:"stick_middle.png"},
         {id:"stick_shadow", src:"stick_shadow.png"},

@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster){
+KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster, Background){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -12,6 +12,11 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             this._bindEvent();
             input.init();
             resource.load();
+
+            this.top = 65;
+            this.left = 20;
+            this.bottom = 552;
+            this.right = 982;
         },
         _bindEvent:function(){
             var that = this;
@@ -33,6 +38,9 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 ticker.start();
             }
 
+            var bg = this.bg = new Background();
+            this.stage.addChild(bg);
+
             var bangArr = this.bangArr = [];
             var bang = window._bang = new Bang({
                 x:200,
@@ -45,6 +53,24 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
             var bang = window._bang = new Bang({
                 x:700,
+                y:100,
+                width:20,
+                height:300
+            });
+            this.stage.addChild(bang);
+            bangArr.push(bang);
+
+            var bang = window._bang = new Bang({
+                x:200,
+                y:400,
+                width:200,
+                height:20
+            });
+            this.stage.addChild(bang);
+            bangArr.push(bang);
+
+            var bang = window._bang = new Bang({
+                x:100,
                 y:100,
                 width:20,
                 height:300
@@ -82,5 +108,5 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster", "kill/background"]
 });

@@ -1,21 +1,117 @@
-KISSY.add("kill/bang", function(){
+KISSY.add("kill/bang", function(S, resource){
     var Class = Hilo.Class;
     var Sprite = Hilo.Sprite;
     var Container = Hilo.Container;
     var View = Hilo.View;
+    var Tween = Hilo.Tween;
+    var Bitmap = Hilo.Bitmap;
 
     var Bang = Class.create({
         Extends:Container,
         constructor:function(properties){
             Bang.superclass.constructor.call(this, properties);
 
+            var width = properties.length;
+            this.rotation = 0;
+            var rotation = properties.rotation;
+
+            this.width = rotation == 90?30:width + 34;
+            this.height = rotation == 0?30:width + 34;
+            // this.background = "rgba(0,255,0,.4)"
             this.vx = this.vy = 0;
-            this.display = new View({
-                width:this.width,
-                height:this.height,
-                background:"#000"
+            this.display = new Container({
+                x:rotation == 90?50:0,
+                y:rotation == 0?-20:0,
+                width:width+34,
+                height:30,
+                rotation:rotation
             });
+            this.topContainer = new Container();
+            this.bottomContainer = new Container();
+
             this.addChild(this.display);
+            this.display.addChild(this.bottomContainer);
+            this.display.addChild(this.topContainer);
+
+            var middle = new Bitmap({
+                x:17,
+                y:20,
+                scaleX:width*.1,
+                image:resource.get("stick_middle")
+            });
+            this.topContainer.addChild(middle);
+
+            var light = new Bitmap({
+                x:20,
+                y:18,
+                image:resource.get("stick_light")
+            });
+            this.topContainer.addChild(light);
+
+            var delay = Math.random() * 1000;
+            Tween.to(light, {
+                x:width
+            },{
+                duration:1000,
+                loop:true,
+                reverse:true,
+                delay:delay
+            });
+
+            Tween.to(this.topContainer, {
+                y:5
+            },{
+                duration:1000,
+                loop:true,
+                reverse:true,
+                delay:delay
+            });
+
+            var shadow = new Bitmap({
+                x:9,
+                y:52,
+                image:resource.get("stick_shadow"),
+                pivotX:6.5
+            });
+            this.bottomContainer.addChild(shadow);
+            Tween.to(shadow, {
+                scaleX:1.2
+            },{
+                duration:1000,
+                loop:true,
+                reverse:true,
+                delay:delay
+            });
+
+            var shadow = new Bitmap({
+                x:25 + width,
+                y:52,
+                scaleX:-1,
+                pivotX:6.5,
+                image:resource.get("stick_shadow")
+            });
+            this.bottomContainer.addChild(shadow);
+            Tween.to(shadow, {
+                scaleX:-1.2
+            },{
+                duration:1000,
+                loop:true,
+                reverse:true,
+                delay:delay
+            });
+
+            var start = new Bitmap({
+                x:0,
+                image:resource.get("stick_start")
+            });
+            this.topContainer.addChild(start);
+
+            var start = new Bitmap({
+                x:width + 34,
+                scaleX:-1,
+                image:resource.get("stick_start")
+            });
+            this.topContainer.addChild(start);
         },
         onUpdate:function(){
             this.x += this.vx;
@@ -28,5 +124,5 @@ KISSY.add("kill/bang", function(){
     });
     return Bang;
 },{
-    requires:[]
+    requires:["kill/resource"]
 });

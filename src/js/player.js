@@ -33,7 +33,7 @@ KISSY.add("kill/player", function(S, resource, input){
         },
         onUpdate:function(){
             var that = this;
-            var v = 3;
+            var v = 5;
             if(that.getInput("up")){
                 this.vy = -v;
             }
@@ -64,7 +64,21 @@ KISSY.add("kill/player", function(S, resource, input){
             this.x += this.vx;
             this.y += this.vy;
 
-            var isHold = 1//that.getInput("hold");
+            if(this.x + 22 > _game.right){
+                this.x = _game.right - 22;
+            }
+            else if(this.x - 22 < _game.left){
+                this.x = _game.left + 22;
+            }
+
+            if(this.y + 44 > _game.bottom){
+                this.y = _game.bottom - 44;
+            }
+            else if(this.y + 44 < _game.top){
+                this.y = _game.top - 44;
+            }
+
+            var isHold = that.getInput("hold");
 
             this.bangArr.forEach(function(bang){
                 var left = that.x - 22;

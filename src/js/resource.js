@@ -2,7 +2,11 @@ KISSY.add("kill/resource", function(S, mediator, config){
     var LoadQueue = Hilo.LoadQueue;
     var res = [
         {id:"player", src:"billd.png"},
-        {id:"road", src:"road.jpg"}
+        {id:"road", src:"road.jpg"},
+        {id:"stick_light", src:"stick_light.png"},
+        {id:"stick_middle", src:"stick_middle.png"},
+        {id:"stick_shadow", src:"stick_shadow.png"},
+        {id:"stick_start", src:"stick_start.png"}
     ];
 
     S.each(res, function(r){

@@ -4,6 +4,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
     var Container = Hilo.Container;
     var Bitmap = Hilo.Bitmap;
     var View = Hilo.View;
+    var Tween = Hilo.Tween;
 
     var game = window._game = {
         _isInit:false,
@@ -35,6 +36,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 });
                 var ticker = this.ticker = new Ticker(config.fps);
                 ticker.addTick(stage);
+                ticker.addTick(Tween);
                 ticker.start();
             }
 
@@ -45,8 +47,8 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bang = window._bang = new Bang({
                 x:200,
                 y:300,
-                width:200,
-                height:20
+                length:200,
+                rotation:0
             });
             this.stage.addChild(bang);
             bangArr.push(bang);
@@ -54,8 +56,8 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bang = window._bang = new Bang({
                 x:700,
                 y:100,
-                width:20,
-                height:300
+                rotation:90,
+                length:300
             });
             this.stage.addChild(bang);
             bangArr.push(bang);
@@ -63,8 +65,8 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bang = window._bang = new Bang({
                 x:200,
                 y:400,
-                width:200,
-                height:20
+                length:200,
+                rotation:0
             });
             this.stage.addChild(bang);
             bangArr.push(bang);
@@ -72,8 +74,8 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bang = window._bang = new Bang({
                 x:100,
                 y:100,
-                width:20,
-                height:300
+                rotation:90,
+                length:300
             });
             this.stage.addChild(bang);
             bangArr.push(bang);

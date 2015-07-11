@@ -33,7 +33,7 @@ KISSY.add("kill/player", function(S, resource, input){
         },
         onUpdate:function(){
             var that = this;
-            var v = 3;
+            var v = 5;
             if(that.getInput("up")){
                 this.vy = -v;
             }

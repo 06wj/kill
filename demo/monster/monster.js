@@ -24,8 +24,8 @@ var Monster = function(x,y){
 	this.idleDir = IDLEDIR.P;
 }
 
-var MAX_X = 1000;
-var MIN_X = 0;
+var MAX_X = 600;
+var MIN_X = 100;
 
 var MAX_Y = 600;
 var MIN_Y = 0;
@@ -57,9 +57,6 @@ var getLinePointsByLen = function (line, step) {
 		p = pointDisVecThenPoint(p.x, p.y);
 
 		if (!isNaN(p.x)) {
-
-			if(i == len - 1) p.e = true;
-			else p.e = false;
 
 			points.push(p);
 		}

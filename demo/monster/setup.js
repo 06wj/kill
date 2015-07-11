@@ -47,6 +47,7 @@ window.onload = function () {
 	this.ctx = canvas.getContext("2d");
 
 	var m = new Monster(100,100);
+	var n = new Monster(400,400);
 
 	var frame = 0;
 	function loop() {
@@ -57,6 +58,9 @@ window.onload = function () {
 
 		m.update();
 		m.draw();
+
+		n.update();
+		n.draw();
 
 		requestAnimationFrame(loop);
 	}
@@ -72,6 +76,7 @@ window.onload = function () {
 		Manager.pepole.y = e.pageY;
 
 		m.state = MonsterState.BLOODTHIRSTY;
+		n.state = MonsterState.BLOODTHIRSTY;
 	}
 
 	function mouseup(e) {

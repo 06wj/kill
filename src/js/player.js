@@ -79,7 +79,7 @@ KISSY.add("kill/player", function(S, resource, input){
                     if(top != bangBottom && bottom != bangTop){
                         if(right > bangLeft && left < bangLeft){
 
-                            if(that.vx > 0){
+                            if(that.vx > 0 || bang.lastVx < 0){
                                 that.x = bangLeft - 22;
                             }
                             if(isHold && that.vx > 0){
@@ -87,7 +87,7 @@ KISSY.add("kill/player", function(S, resource, input){
                             }
                         }
                         else if(left < bangRight && right > bangRight){
-                            if(that.vx < 0){
+                            if(that.vx < 0  || bang.lastVx > 0){
                                 that.x = bangRight + 22;
                             }
                             if(isHold && that.vx < 0){
@@ -98,14 +98,18 @@ KISSY.add("kill/player", function(S, resource, input){
 
                     if(left != bangRight && right != bangLeft){
                         if(bottom > bangTop && top < bangTop){
-                            that.y = bangTop - 44;
+                            if(that.vy > 0 || bang.lastVy < 0){
+                                that.y = bangTop - 44;
+                            }
 
                             if(isHold && that.vy > 0){
                                 bang.vy += bottom - bangTop;
                             }
                         }
                         else if(top < bangBottom && bottom > bangBottom){
-                            that.y = bangBottom;
+                            if(that.vy < 0  || bang.lastVy > 0){
+                                that.y = bangBottom;
+                            }
 
                             if(isHold && that.vy < 0){
                                 bang.vy += top - bangBottom;

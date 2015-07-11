@@ -22,6 +22,8 @@ KISSY.add("kill/bang", function(){
             this.x += this.vx;
             this.y += this.vy;
 
+            this.lastVx = this.vx;
+            this.lastVy = this.vy;
             this.vx = this.vy = 0;
         }
     });

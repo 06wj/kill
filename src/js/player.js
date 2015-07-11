@@ -27,6 +27,11 @@ KISSY.add("kill/player", function(S, resource, input){
             this.display.play("run");
 
             this.bangArr = _game.bangArr;
+
+            this.width = 44;
+            this.height = 44;
+            this.halfWidth = this.width * .5;
+            this.halfHeight = this.height * .5;
         },
         getInput:function(data){
             return input[data + this.playerNum];
@@ -64,27 +69,27 @@ KISSY.add("kill/player", function(S, resource, input){
             this.x += this.vx;
             this.y += this.vy;
 
-            if(this.x + 22 > _game.right){
-                this.x = _game.right - 22;
+            if(this.x + this.halfWidth > _game.right){
+                this.x = _game.right - this.halfWidth;
             }
-            else if(this.x - 22 < _game.left){
-                this.x = _game.left + 22;
+            else if(this.x - this.halfWidth < _game.left){
+                this.x = _game.left + this.halfWidth;
             }
 
-            if(this.y + 44 > _game.bottom){
-                this.y = _game.bottom - 44;
+            if(this.y + this.height > _game.bottom){
+                this.y = _game.bottom - this.height;
             }
-            else if(this.y + 44 < _game.top){
-                this.y = _game.top - 44;
+            else if(this.y < _game.top){
+                this.y = _game.top;
             }
 
             var isHold = that.getInput("hold");
 
             this.bangArr.forEach(function(bang){
-                var left = that.x - 22;
-                var right = that.x + 22;
+                var left = that.x - that.halfWidth;
+                var right = that.x + that.halfWidth;
                 var top = that.y;
-                var bottom = that.y + 44;
+                var bottom = that.y + that.height;
 
                 var bangLeft = bang.x;
                 var bangRight = bang.x + bang.width;
@@ -96,7 +101,7 @@ KISSY.add("kill/player", function(S, resource, input){
                         if(right > bangLeft && left < bangLeft){
 
                             if(that.vx > 0 || bang.lastVx < 0){
-                                that.x = bangLeft - 22;
+                                that.x = bangLeft - that.halfWidth;
                             }
                             if(isHold && that.vx > 0){
                                 bang.vx += right - bangLeft;
@@ -104,7 +109,7 @@ KISSY.add("kill/player", function(S, resource, input){
                         }
                         else if(left < bangRight && right > bangRight){
                             if(that.vx < 0  || bang.lastVx > 0){
-                                that.x = bangRight + 22;
+                                that.x = bangRight + that.halfWidth;
                             }
                             if(isHold && that.vx < 0){
                                 bang.vx += left - bangRight;
@@ -115,7 +120,7 @@ KISSY.add("kill/player", function(S, resource, input){
                     if(left != bangRight && right != bangLeft){
                         if(bottom > bangTop && top < bangTop){
                             if(that.vy > 0 || bang.lastVy < 0){
-                                that.y = bangTop - 44;
+                                that.y = bangTop - that.height;
                             }
 
                             if(isHold && that.vy > 0){

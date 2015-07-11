@@ -115,6 +115,20 @@ KISSY.add("kill/bang", function(S, resource){
             this.lastVx = this.vx;
             this.lastVy = this.vy;
             this.vx = this.vy = 0;
+
+            if(this.x + this.width > _game.right){
+                this.x = _game.right - this.width;
+            }
+            else if(this.x < _game.left){
+                this.x = _game.left;
+            }
+
+            if(this.y + this.height > _game.bottom){
+                this.y = _game.bottom - this.height;
+            }
+            else if(this.y < _game.top){
+                this.y = _game.top;
+            }
         }
     });
     return Bang;

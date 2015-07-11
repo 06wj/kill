@@ -14,7 +14,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             input.init();
             resource.load();
 
-            this.top = 65;
+            this.top = 51;
             this.left = 20;
             this.bottom = 552;
             this.right = 982;

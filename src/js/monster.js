@@ -12,7 +12,7 @@ KISSY.add("kill/monster", function (S,resource) {
 		sticks: []
 	}
 
-	var MonsterState = {
+	window.MonsterState = {
 		IDLE: "IDLE",
 		WAKE: "WAKE",
 		COLLIDEWITHSTICK: "COLLIDEWITHSTICK",
@@ -104,6 +104,8 @@ KISSY.add("kill/monster", function (S,resource) {
 
 			this.idleDir = IDLEDIR.P;
 
+			this.vx = 1;
+			this.vy = 1;
 
 			this.onGoingPoints = [];
 
@@ -127,6 +129,11 @@ KISSY.add("kill/monster", function (S,resource) {
 				scaleY:2
 			});
 
+			this.width = 44;
+			this.height = 44;
+			this.pivotX = 22;
+			this.pivotY = 22;
+
 			this.addChild(this.display);
 			this.display.play("run");
 		},
@@ -149,106 +156,70 @@ KISSY.add("kill/monster", function (S,resource) {
 				this.idleDir = IDLEDIR.P;
 			}
 		},
-
-		stickCollisionCheck: function () {
-			if (this.state == MonsterState.WALKING || this.state == MonsterState.IDLE) {
-
-				for (var i = 0, len = Manager.sticks.length; i < len; i++) {
-
-					if (aabbContainsSegment(this.collisionArea, {
-						start: Manager.sticks[i].start,
-						end: Manager.sticks[i].end
-					})) {
-
-						this.state = MonsterState.WALKINGONSTICK;
-
-						//判断人兽方向向量，确定选择棍子的哪一侧
-						var MP = {
-							x: Manager.pepole.x - this.x,
-							y: Manager.pepole.y - this.y
-						}
-
-						var SSM = {
-							x: Manager.sticks[i].start.x - this.x,
-							y: Manager.sticks[i].start.y - this.y
-						}
-
-
-						if (MP.x * SSM.x + MP.y * SSM.y > 0) {
-							this.initPoints(Manager.sticks[i].start);
-						}
-						else {
-							this.initPoints(Manager.sticks[i].end);
-						}
-
-						return;
-					}
-				}
-			}
-
-		},
-		initPoints: function (target) {
-			var line = {};
-			line.start = {
-				x: this.x,
-				y: this.y
-			}
-
-			line.end = {
-				x: target.x,
-				y: target.y
-			}
-
-			this.onGoingPoints = getLinePointsByLen(line, 5);
-		},
-		bloodthirsty: function (target) {
-		},
 		onUpdate: function () {
+			var that = this;
 
-			if ((this.state == MonsterState.WAKE || this.state == MonsterState.WAKINGONSTICKEND) && this.onGoingPoints.length == 0) {
-				this.initPoints(Manager.pepole);
+			this.x += this.vx;
+			this.y += this.vy;
 
-				if (this.state == MonsterState.WAKE) {
-					this.state = MonsterState.WALKING;
-				}
+			var isCollision = false;
+			_game.bangArr.forEach(function(bang){
+				var left = that.x - 22;
+				var right = that.x + 22;
+				var top = that.y;
+				var bottom = that.y + 44;
 
-				if (this.state == MonsterState.WAKINGONSTICKEND) {
-					this.state = MonsterState.LEAVESTICK;
-				}
-			}
+				var bangLeft = bang.x;
+				var bangRight = bang.x + bang.width;
+				var bangTop = bang.y;
+				var bangBottom = bang.y + bang.height;
 
+				if(bang.hitTestObject(that)){
+					isCollision = true;
+					if(top != bangBottom && bottom != bangTop){
+						if(right > bangLeft && left < bangLeft){
 
-			if (this.state == MonsterState.IDLE) {
-				this.idle();
-			}
-			else {
-				if (this.onGoingPoints.length > 0) {
-					this.x = this.onGoingPoints[0].x;
-					this.y = this.onGoingPoints[0].y;
+							if(that.vx > 0 || bang.lastVx < 0){
+								that.vx = -that.vx;
 
-					this.onGoingPoints.shift();
-				}
-				else {
-					//前一个状态是walking  stick.
-					if (this.state == MonsterState.WALKINGONSTICK) {
-						this.state = MonsterState.WAKINGONSTICKEND;
+								that.x = bangLeft - 22;
+							}
+						}
+						else if(left < bangRight && right > bangRight){
+							if(that.vx < 0  || bang.lastVx > 0){
+								that.x = bangRight + 22;
+							}
+						}
 					}
-					else {
-//					this.state = MonsterState.IDLE;
+
+					if(left != bangRight && right != bangLeft){
+						if(bottom > bangTop && top < bangTop){
+
+							if(that.vy > 0 || bang.lastVy < 0){
+								that.y = bangTop - 22;
+							}
+						}
+						else if(top < bangBottom && bottom > bangBottom){
+							if(that.vy < 0  || bang.lastVy > 0){
+								that.y = bangBottom;
+							}
+						}
 					}
-
 				}
+			});
+
+			if(that.x < _game.left - that.width){
+				that.vx = - that.vx;
 			}
 
-
-			this.collisionArea = {
-				minX: this.x - this.r,
-				maxX: this.x + this.r,
-				minY: this.y - this.r,
-				maxY: this.y + this.r
+			if(that.y > _game.bottom - that.height){
+				that.vy = - that.vy;
 			}
 
-			this.stickCollisionCheck();
+//			if(!isCollision){
+//				that.idle();
+//			}
+
 		}
 	});
 

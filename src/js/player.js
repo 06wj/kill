@@ -12,24 +12,25 @@ KISSY.add("kill/player", function(S, resource, input){
             this.playerNum = properties.playerNum;
             this.width = this.height = 44;
             this.pivotX = 22;
+            var img = resource.get("player" + (this.playerNum + 1));
             var textures = Hilo.TextureAtlas.createSpriteFrames([
-                ["run", "24-29", resource.get("player"), 22, 22, true, 100],
-                ["run2", "24-29", resource.get("player"), 22, 22, true, 10]
+                ["push", "0,1", img, 51, 49, true, 300],
+                ["state", "2", img, 51, 49, true, 300],
+                ["walk", "3,4", img, 51, 49, true, 300],
+                ["win", "5,6", img, 51, 49, true, 300]
             ]);
             this.display = new Sprite({
                 frames:textures,
                 loop:true,
-                timeBased:true,
-                scaleX:2,
-                scaleY:2
+                timeBased:true
             });
             this.addChild(this.display);
-            this.display.play("run");
+            this.display.goto("walk");
 
             this.bangArr = _game.bangArr;
 
-            this.width = 44;
-            this.height = 44;
+            this.width = 51;
+            this.height = 49;
             this.halfWidth = this.width * .5;
             this.halfHeight = this.height * .5;
         },
@@ -60,10 +61,10 @@ KISSY.add("kill/player", function(S, resource, input){
             }
 
             if(this.vx > 0){
-                this.scaleX = 1;
+                this.scaleX = -1;
             }
             else if(this.vx < 0){
-                this.scaleX = -1;
+                this.scaleX = 1;
             }
 
             this.x += this.vx;

@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config, input){
+KISSY.add("kill/game", function(S, resource, mediator, config, input, Player){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -33,16 +33,13 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input){
                 ticker.start();
             }
 
-            console.log("this._initGame");
 
-            var player = new Bitmap({
-                image:resource.get("player")
-            });
+            var player = window._player = new Player;
             this.stage.addChild(player)
         },
     };
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player"]
 });

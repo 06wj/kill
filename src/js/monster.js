@@ -118,45 +118,26 @@ KISSY.add("kill/monster", function (S,resource) {
 			}
 
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
-				["run", "80-87", resource.get("player"), 22, 22, true, 100],
-				["run2", "24-29", resource.get("player"), 22, 22, true, 10]
+//				["run", "80-87", resource.get("player"), 22, 22, true, 100],
+				["monster1", "0-1", resource.get("monster1"), 36, 40, true, 300]
 			]);
 			this.display = new Hilo.Sprite({
-				background:"#f00",
 				frames:textures,
 				loop:true,
 				timeBased:true,
-				scaleX:2,
-				scaleY:2
+				scaleX: -1,
+				scaleY:1
 			});
 
-			this.width = 44;
-			this.height = 44;
-			this.pivotX = 22;
-			this.pivotY = 22;
+			this.width = 36;
+			this.height = 40;
+			this.pivotX = 18;
+			this.pivotY = 20;
 
 			this.addChild(this.display);
-			this.display.play("run");
+			this.display.play("monster1");
 		},
 		Extends:Hilo.Container,
-		idle: function () {
-
-			if (this.idleDir == IDLEDIR.P) {
-				this.x += 1;
-			}
-
-			if (this.idleDir == IDLEDIR.B) {
-				this.x -= 1;
-			}
-
-			if (this.x > 700) {
-				this.idleDir = IDLEDIR.B;
-			}
-
-			if (this.x < 100) {
-				this.idleDir = IDLEDIR.P;
-			}
-		},
 		onUpdate: function () {
 			var that = this;
 
@@ -165,10 +146,10 @@ KISSY.add("kill/monster", function (S,resource) {
 
 			var isCollision = false;
 			_game.bangArr.forEach(function(bang){
-				var left = that.x - 22;
-				var right = that.x + 22;
+				var left = that.x - that.width/2;
+				var right = that.x + that.width/2;
 				var top = that.y;
-				var bottom = that.y + 44;
+				var bottom = that.y + that.height;
 
 				var bangLeft = bang.x;
 				var bangRight = bang.x + bang.width;
@@ -182,15 +163,17 @@ KISSY.add("kill/monster", function (S,resource) {
 
 							if(that.vx > 0 || bang.lastVx < 0){
 								that.vx = -that.vx;
+								that.display.scaleX = -that.display.scaleX;
 
-								that.x = bangLeft - 22;
+								that.x = bangLeft - that.width/2;
 							}
 						}
 						else if(left < bangRight && right > bangRight){
 							if(that.vx < 0  || bang.lastVx > 0){
-
 								that.vx = -that.vx;
-								that.x = bangRight + 22;
+								that.display.scaleX = -that.display.scaleX;
+
+								that.x = bangRight + that.width/2;
 							}
 						}
 					}
@@ -199,15 +182,15 @@ KISSY.add("kill/monster", function (S,resource) {
 						if(bottom > bangTop && top < bangTop){
 
 							if(that.vy > 0 || bang.lastVy < 0){
-
 								that.vy = -that.vy;
-								that.y = bangTop - 22;
+
+								that.y = bangTop - that.height/2;
 							}
 						}
 						else if(top < bangBottom && bottom > bangBottom){
 							if(that.vy < 0  || bang.lastVy > 0){
-
 								that.vy = -that.vy;
+
 								that.y = bangBottom;
 							}
 						}

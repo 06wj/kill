@@ -100,8 +100,9 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
 	        var monsterArr = this.monsterArr = [];
 	        var m = new Monster({
-		        x: 100, y: 100
+		        x: 500, y: 100
 	        });
+	        m.state = MonsterState.WAKE;
 	        this.stage.addChild(m);
 	        monsterArr.push(m);
 

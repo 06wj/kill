@@ -104,6 +104,7 @@ KISSY.add("kill/player", function(S, resource, input){
                                 that.x = bangLeft - that.halfWidth;
                             }
                             if(isHold && that.vx > 0){
+                                that.x += that.vx;
                                 bang.vx += right - bangLeft;
                             }
                         }
@@ -112,6 +113,7 @@ KISSY.add("kill/player", function(S, resource, input){
                                 that.x = bangRight + that.halfWidth;
                             }
                             if(isHold && that.vx < 0){
+                                that.x += that.vx;
                                 bang.vx += left - bangRight;
                             }
                         }
@@ -124,6 +126,7 @@ KISSY.add("kill/player", function(S, resource, input){
                             }
 
                             if(isHold && that.vy > 0){
+                                that.y += that.vy;
                                 bang.vy += bottom - bangTop;
                             }
                         }
@@ -133,6 +136,7 @@ KISSY.add("kill/player", function(S, resource, input){
                             }
 
                             if(isHold && that.vy < 0){
+                                that.y += that.vy;
                                 bang.vy += top - bangBottom;
                             }
                         }

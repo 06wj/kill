@@ -1,0 +1,1 @@
+KISSY.add('kill/animal',)

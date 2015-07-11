@@ -8,9 +8,40 @@
             margin: 0px;
             padding:0px;
         }
+
+        #game{
+            position: absolute;
+            top:50%;
+            left:50%;
+            margin-left:-500px;
+            margin-top:-300px;
+            width: 1000px;
+            height: 600px;
+            background-color: #aaa;
+        }
     </style>
 </head>
 <body>
     <div id="game"></div>
+    <script src="http://g.alicdn.com/kissy/k/1.4.7/seed-min.js"></script>
+    <script src="../src/lib/hilo.js"></script>
+    <script>
+    var __killPath = "../src/";
+    KISSY.config({
+        packages: {
+            "kill": {
+                tag: new Date().getTime(),
+                base: __killPath + "js/",
+                charset: "utf-8",
+                debug: true,
+                ignorePackageNameInUri: true,
+                combine:false
+            }
+        }
+    });
+    KISSY.use("kill/game", function(S, game){
+        game.init(document.getElementById("game"));
+    });
+    </script>
 </body>
 </html>

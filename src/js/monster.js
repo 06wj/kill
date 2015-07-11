@@ -104,8 +104,8 @@ KISSY.add("kill/monster", function (S,resource) {
 
 			this.idleDir = IDLEDIR.P;
 
-			this.vx = 1;
-			this.vy = 1;
+			this.vx = 2 + Math.random();
+			this.vy = 2 + Math.random();
 
 			this.onGoingPoints = [];
 
@@ -122,6 +122,7 @@ KISSY.add("kill/monster", function (S,resource) {
 				["run2", "24-29", resource.get("player"), 22, 22, true, 10]
 			]);
 			this.display = new Hilo.Sprite({
+				background:"#f00",
 				frames:textures,
 				loop:true,
 				timeBased:true,

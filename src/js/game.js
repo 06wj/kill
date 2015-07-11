@@ -106,6 +106,27 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 	        this.stage.addChild(m);
 	        monsterArr.push(m);
 
+	        var m1 = new Monster({
+		        x: 500, y: 500
+	        });
+	        m1.state = MonsterState.WAKE;
+	        this.stage.addChild(m1);
+	        monsterArr.push(m1);
+
+	        var m2 = new Monster({
+		        x: 100, y: 100
+	        });
+	        m2.state = MonsterState.WAKE;
+	        this.stage.addChild(m2);
+	        monsterArr.push(m2);
+
+	        var m3 = new Monster({
+		        x: 400, y: 400
+	        });
+	        m3.state = MonsterState.WAKE;
+	        this.stage.addChild(m3);
+	        monsterArr.push(m3);
+
 
             var bgTop = new Bitmap({
                 image:resource.get("roadTop"),

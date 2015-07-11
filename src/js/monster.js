@@ -187,6 +187,8 @@ KISSY.add("kill/monster", function (S,resource) {
 						}
 						else if(left < bangRight && right > bangRight){
 							if(that.vx < 0  || bang.lastVx > 0){
+
+								that.vx = -that.vx;
 								that.x = bangRight + 22;
 							}
 						}
@@ -196,11 +198,15 @@ KISSY.add("kill/monster", function (S,resource) {
 						if(bottom > bangTop && top < bangTop){
 
 							if(that.vy > 0 || bang.lastVy < 0){
+
+								that.vy = -that.vy;
 								that.y = bangTop - 22;
 							}
 						}
 						else if(top < bangBottom && bottom > bangBottom){
 							if(that.vy < 0  || bang.lastVy > 0){
+
+								that.vy = -that.vy;
 								that.y = bangBottom;
 							}
 						}
@@ -208,11 +214,11 @@ KISSY.add("kill/monster", function (S,resource) {
 				}
 			});
 
-			if(that.x < _game.left - that.width){
+			if(that.x < _game.left + that.width || that.x > _game.right - that.width){
 				that.vx = - that.vx;
 			}
 
-			if(that.y > _game.bottom - that.height){
+			if(that.y > _game.bottom - that.height || that.y < that.height){
 				that.vy = - that.vy;
 			}
 

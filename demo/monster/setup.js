@@ -47,10 +47,14 @@ window.onload = function () {
 	this.ctx = canvas.getContext("2d");
 
 	var m = new Monster(100,100);
-	var n = new Monster(400,400);
+	var n = new Monster(600,600);
 	var o = new Monster(500,500);
 
 	var s = new Stick();
+	var s1 = new Stick({x: 600, y : 600}, {x: 100, y: 400});
+
+	Manager.sticks.push(s);
+	Manager.sticks.push(s1);
 
 	var frame = 0;
 	function loop() {
@@ -62,14 +66,17 @@ window.onload = function () {
 		m.update();
 		m.draw();
 
-		n.update();
-		n.draw();
-
-		o.update();
-		o.draw();
+//		n.update();
+//		n.draw();
+//
+//		o.update();
+//		o.draw();
 
 		s.update();
 		s.draw();
+
+		s1.update();
+		s1.draw();
 
 		requestAnimationFrame(loop);
 	}
@@ -84,7 +91,7 @@ window.onload = function () {
 		Manager.pepole.x = e.pageX;
 		Manager.pepole.y = e.pageY;
 
-		m.state = MonsterState.BLOODTHIRSTY;
+		m.state = MonsterState.WAKE;
 	}
 
 	function mouseup(e) {

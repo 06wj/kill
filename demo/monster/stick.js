@@ -17,7 +17,9 @@ var Stick = function(start,end){
 
 Stick.prototype = {
 	constructor: Stick,
-	update: function(){},
+	update: function(){
+
+	},
 	draw: function(){
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = this.w;

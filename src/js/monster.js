@@ -141,10 +141,6 @@ KISSY.add("kill/monster", function (S,resource) {
 		onUpdate: function () {
 			var that = this;
 
-			this.x += this.vx;
-			this.y += this.vy;
-
-			var isCollision = false;
 			_game.bangArr.forEach(function(bang){
 				var left = that.x - that.width/2;
 				var right = that.x + that.width/2;
@@ -157,59 +153,47 @@ KISSY.add("kill/monster", function (S,resource) {
 				var bangBottom = bang.y + bang.height;
 
 				if(bang.hitTestObject(that)){
-					isCollision = true;
-					if(top != bangBottom && bottom != bangTop){
-						if(right > bangLeft && left < bangLeft){
 
-							if(that.vx > 0 || bang.lastVx < 0){
-								that.vx = -that.vx;
-								that.display.scaleX = -that.display.scaleX;
+					if((that.x < bangLeft && that.y < bangTop) || (that.x > bangRight && that.y < bangTop) || (that.x > bangRight && that.y > bangBottom) || (that.x > bangRight && that.y < bangTop)){
+						that.vx = -that.vx;
+						that.vy = -that.vy;
 
-								that.x = bangLeft - that.width/2;
-							}
-						}
-						else if(left < bangRight && right > bangRight){
-							if(that.vx < 0  || bang.lastVx > 0){
-								that.vx = -that.vx;
-								that.display.scaleX = -that.display.scaleX;
-
-								that.x = bangRight + that.width/2;
-							}
-						}
+						that.display.scaleX = -that.display.scaleX;
 					}
-
-					if(left != bangRight && right != bangLeft){
-						if(bottom > bangTop && top < bangTop){
-
-							if(that.vy > 0 || bang.lastVy < 0){
-								that.vy = -that.vy;
-
-								that.y = bangTop - that.height/2;
-							}
+					else{
+						if(that.x < bangLeft){
+							that.vx = -that.vx;
+							that.display.scaleX = -that.display.scaleX;
 						}
-						else if(top < bangBottom && bottom > bangBottom){
-							if(that.vy < 0  || bang.lastVy > 0){
-								that.vy = -that.vy;
 
-								that.y = bangBottom;
-							}
+						if(that.y < bangTop){
+							that.vy = -that.vy;
+						}
+
+						if(that.x > bangRight){
+							that.vx = -that.vx;
+							that.display.scaleX = -that.display.scaleX;
+						}
+
+						if(that.y > bangBottom){
+							that.vy = -that.vy;
 						}
 					}
 				}
 			});
 
+
 			if(that.x < _game.left + that.width || that.x > _game.right - that.width){
 				that.vx = - that.vx;
 			}
 
-			if(that.y > _game.bottom - that.height || that.y < that.height){
+			if(that.y > _game.bottom - that.height || that.y < _game.top + that.height){
 				that.vy = - that.vy;
 			}
 
-//			if(!isCollision){
-//				that.idle();
-//			}
 
+			this.x += this.vx;
+			this.y += this.vy;
 		}
 	});
 

@@ -7,7 +7,8 @@ KISSY.add("kill/resource", function(S, mediator, config){
         {id:"stick_light", src:"stick_light.png"},
         {id:"stick_middle", src:"stick_middle.png"},
         {id:"stick_shadow", src:"stick_shadow.png"},
-        {id:"stick_start", src:"stick_start.png"}
+        {id:"stick_start", src:"stick_start.png"},
+        {id:"monster1", src:"monster1.png"}
     ];
 
     S.each(res, function(r){

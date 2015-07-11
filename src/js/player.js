@@ -96,10 +96,23 @@ KISSY.add("kill/player", function(S, resource, input){
                 var bangTop = bang.y;
                 var bangBottom = bang.y + bang.height;
 
+                if(isHold){
+                    this.x -= this.vx;
+                    this.y -= this.vy;
+
+                    var isHit = bang.hitTestObject(that);
+
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if(isHit && !bang.hitTestObject(that)){
+                        console.log('sssssss')
+                    }
+                }
+
                 if(bang.hitTestObject(that)){
                     if(top != bangBottom && bottom != bangTop){
                         if(right > bangLeft && left < bangLeft){
-
                             if(that.vx > 0 || bang.lastVx < 0){
                                 that.x = bangLeft - that.halfWidth;
                             }

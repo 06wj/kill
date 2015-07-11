@@ -38,7 +38,7 @@ KISSY.add("kill/player", function(S, resource, input){
         },
         onUpdate:function(){
             var that = this;
-            var v = 5;
+            var v = 3;
             if(that.getInput("up")){
                 this.vy = -v;
             }
@@ -96,21 +96,8 @@ KISSY.add("kill/player", function(S, resource, input){
                 var bangTop = bang.y;
                 var bangBottom = bang.y + bang.height;
 
-                if(isHold){
-                    this.x -= this.vx;
-                    this.y -= this.vy;
-
-                    var isHit = bang.hitTestObject(that);
-
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if(isHit && !bang.hitTestObject(that)){
-                        console.log('sssssss')
-                    }
-                }
-
                 if(bang.hitTestObject(that)){
+                    bang["lastHit" + that.playerNum] = that;
                     if(top != bangBottom && bottom != bangTop){
                         if(right > bangLeft && left < bangLeft){
                             if(that.vx > 0 || bang.lastVx < 0){
@@ -150,10 +137,31 @@ KISSY.add("kill/player", function(S, resource, input){
                             }
                         }
                     }
-
-
-
-
+                }
+                else{
+                    if(bang["lastHit" + that.playerNum] == that){
+                        if(isHold){
+                            if(top != bangBottom && bottom != bangTop){
+                                if(left >= bangRight && that.vx > 0){
+                                    bang.vx += that.vx;
+                                }
+                                else if(right <= bangLeft && that.vx < 0){
+                                    bang.vx += that.vx;
+                                }
+                            }
+                            if(left != bangRight && right != bangLeft){
+                                if(top >= bangBottom && that.vy > 0){
+                                    bang.vy += that.vy;
+                                }
+                                else if(bottom <= bangTop && that.vy < 0){
+                                    bang.vy += that.vy;
+                                }
+                            }
+                        }
+                        else{
+                            bang["lastHit" + that.playerNum] = false;
+                        }
+                    }
                 }
             });
         }

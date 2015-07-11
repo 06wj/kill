@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config, input, Player){
+KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -33,13 +33,33 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player){
                 ticker.start();
             }
 
+            var bangArr = this.bangArr = [];
+            var bang = window._bang = new Bang({
+                x:200,
+                y:300
+            });
+            this.stage.addChild(bang);
+            bangArr.push(bang);
 
-            var player = window._player = new Player;
-            this.stage.addChild(player)
+            var player = window._player = new Player({
+                x:150,
+                y:200,
+                playerNum:0
+            });
+            this.stage.addChild(player);
+            player.bangArr = bangArr;
+
+            var player = window._player = new Player({
+                x:150,
+                y:200,
+                playerNum:1
+            });
+            this.stage.addChild(player);
+            player.bangArr = bangArr;
         },
     };
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang"]
 });

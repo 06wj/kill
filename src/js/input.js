@@ -6,11 +6,11 @@ KISSY.add("kill/input", function(S){
         68:"right0",//d
         70:"hold0",//f
 
-        73:"up1",//i
-        75:"down1",//k
-        74:"left1",//j
-        76:"right1",//l
-        186:"hold1"//;
+        38:"up1",//up
+        40:"down1",//down
+        37:"left1",//left
+        39:"right1",//right
+        191:"hold1"//?
     };
 
     var input = window._input = {

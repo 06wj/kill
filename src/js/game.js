@@ -146,14 +146,14 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     y:0,
                     width:1000,
                     height:game.top + 10,
-                    background:"rgba(255, 0, 0, .3)"
+                    // background:"rgba(255, 0, 0, .3)"
                 }),
                 new View({
                     x:0,
                     y:game.bottom - 10,
                     width:1000,
                     height:800-game.bottom + 10,
-                    background:"rgba(255, 0, 0, .3)"
+                    // background:"rgba(255, 0, 0, .3)"
                 })
             ];
 
@@ -165,14 +165,14 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     y:0,
                     width:game.left + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .1)"
+                    // background:"rgba(255, 0, 0, .05)"
                 }),
                 new View({
                     x:game.right - 10,
                     y:0,
                     width:1000-game.right + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .1)"
+                    // background:"rgba(255, 0, 0, .05)"
                 })
             ];
 

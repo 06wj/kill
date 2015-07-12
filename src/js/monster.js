@@ -233,7 +233,9 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			_game.playerArr.forEach(function(player){
 
 				if(player.hitTestObject(that)){
-					Event.fire("dead",player);
+					Event.fire("playerDied",{
+						player:player
+					});
 				}
 			});
 

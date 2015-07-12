@@ -1,4 +1,4 @@
-KISSY.add("kill/player", function(S, resource, input){
+KISSY.add("kill/player", function(S, resource, input, mediator){
     var Class = Hilo.Class;
     var Container = Hilo.Container;
     var Sprite = Hilo.Sprite;
@@ -188,7 +188,11 @@ KISSY.add("kill/player", function(S, resource, input){
             });
         }
     })
+
+    mediator.on("playerDied", function(d){
+        d.player.die()
+    });
     return Player;
 },{
-    requires:["kill/resource", "kill/input"]
+    requires:["kill/resource", "kill/input", "kill/mediator"]
 });

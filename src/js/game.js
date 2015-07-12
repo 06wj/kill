@@ -23,6 +23,12 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var that = this;
             mediator.on("gameLoadComplete", function(){
                 that._initGame(config.state);
+                Hilo.WebAudio.isSupported = false;
+                var audio = Hilo.WebSound.getAudio({
+                    src:__killPath + "audio/Start.mp3",
+                    loop:true
+                });
+                audio.play();
             });
 
             mediator.on("playerGameOver", function(d){

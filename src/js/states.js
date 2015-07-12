@@ -328,7 +328,7 @@ KISSY.add("kill/states", function(){
             ]
         }
     ];
-    arr.length = 1
+
     var states = {
         index:0,
         getState:function(index){

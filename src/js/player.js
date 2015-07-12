@@ -10,7 +10,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
         constructor:function(properties){
             Player.superclass.constructor.call(this, properties);
             if(config.showHit){
-                this.background = "rgba(255,0,0,.3)";
+                this.background = "rgba(111,0,255,.3)";
             }
 
             this.playerNum = properties.playerNum;

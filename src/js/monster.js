@@ -123,27 +123,56 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			this.background = "rgba(0,255,0,.4)"
 
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
-//				["run", "80-87", resource.get("player"), 22, 22, true, 100],
-				["monster1", "0-1", resource.get("monster1"), 36, 40, true, 300]
+				["state", "0-1", resource.get("monster1"), 54, 64, true, 300],
+				["walk", "2-5", resource.get("monster1"), 54, 64, true, 300],
+				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 100]
 			]);
 			this.display = new Hilo.Sprite({
+				y:-22,
 				frames:textures,
 				loop:true,
 				timeBased:true
 			});
 
-			this.width = 36;
+			this.width = 54;
 			this.height = 40;
-			this.pivotX = 18;
-			this.pivotY = 20;
+			this.pivotX = this.width*.5;
+			this.pivotY = this.height*.5;
 			this.scaleX =  1;
 			this.scaleY = 1;
 
 			this.addChild(this.display);
-			this.display.play("monster1");
+			this.display.goto("walk");
 		},
 		Extends:Hilo.Container,
-		die: function(){},
+		die: function(){
+			var that = this;
+			if(!this.isDie){
+				this.isDie = true;
+				this.display.goto("die");
+				this.display.interval = 10;
+				this.onUpdate = null;
+				setTimeout(function(){
+					var textures = Hilo.TextureAtlas.createSpriteFrames([
+						["state", "0-5", resource.get("monsterDie"), 38, 40, false, 100]
+					]);
+					that.display.removeFromParent();
+					that.display = new Hilo.Sprite({
+						y:0,
+						x:that.width*.5,
+						pivotX:19,
+						frames:textures,
+						loop:true,
+						timeBased:true
+					});
+					that.addChild(that.display);
+					that.display.play();
+					setTimeout(function(){
+						that.removeFromParent();
+					}, 1000);
+				}, 300);
+			}
+		},
 		onUpdate: function () {
 			var that = this;
 
@@ -199,7 +228,9 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			_game.playerArr.forEach(function(player){
 
 				if(player.hitTestObject(that)){
-					Event.fire("dead",player);
+					Event.fire("playerDied",{
+						player:player
+					});
 				}
 			});
 

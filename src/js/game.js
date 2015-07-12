@@ -146,14 +146,14 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     y:0,
                     width:1000,
                     height:game.top + 10,
-                    background:"rgba(255, 0, 0, .3)"
+                    // background:"rgba(255, 0, 0, .3)"
                 }),
                 new View({
                     x:0,
                     y:game.bottom - 10,
                     width:1000,
                     height:800-game.bottom + 10,
-                    background:"rgba(255, 0, 0, .3)"
+                    // background:"rgba(255, 0, 0, .3)"
                 })
             ];
 
@@ -165,14 +165,14 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     y:0,
                     width:game.left + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .1)"
+                    // background:"rgba(255, 0, 0, .05)"
                 }),
                 new View({
                     x:game.right - 10,
                     y:0,
                     width:1000-game.right + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .1)"
+                    // background:"rgba(255, 0, 0, .05)"
                 })
             ];
 
@@ -199,7 +199,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                                 hengRects[hj].hitTestObject(shuRects[sj]) &&
                                 shuRects[sj].hitTestObject(hengRects[hi])
                             ){
-                                var monsters = that._getMonster([hengRects[hi], hengRects[hj], shuRects[hi], shuRects[hj]])
+                                var monsters = that._getMonster(hengRects[hi], hengRects[hj], shuRects[si], shuRects[sj])
                             }
                         }
                     }
@@ -207,20 +207,17 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             }
 
         },
-        _getMonster:function(rects){
+        _getMonster:function(h0, h1, s0, s1){
             var that = this;
-            var left = 1000, right = 0, top = 800, bottom = 0;
-            rects.forEach(function(rect){
-                left = Math.min(left, rect.x);
-                top = Math.min(top, rect.y);
-                right = Math.max(right, rect.x + rect.width);
-                bottom = Math.max(bottom, rect.y + rect.height);
-            });
+            var left = Math.min(s0.x, s1.x);
+            var right = Math.max(s0.x + s0.width, s1.x + s1.width);
+            var top = Math.min(h0.y, h1.y);
+            var bottom = Math.max(h0.y + h0.height, h1.y + h1.height);
+
 
             this.monsterArr.forEach(function(monster){
-                if(monster.x >= left && monster.x + monster.width <= right && monster.y >= top && monster.y + monster.height <= bottom){
+                if(!monster.isDie && monster.x >= left && monster.x + monster.width <= right && monster.y >= top && monster.y + monster.height <= bottom){
                     monster.die && monster.die();
-                    console.log("monster die")
                 }
             });
         }

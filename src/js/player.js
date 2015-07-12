@@ -1,4 +1,4 @@
-KISSY.add("kill/player", function(S, resource, input){
+KISSY.add("kill/player", function(S, resource, input, mediator){
     var Class = Hilo.Class;
     var Container = Hilo.Container;
     var Sprite = Hilo.Sprite;
@@ -33,6 +33,23 @@ KISSY.add("kill/player", function(S, resource, input){
             this.height = 49;
             this.halfWidth = this.width * .5;
             this.halfHeight = this.height * .5;
+        },
+        die:function(){
+            if(!this.isDie){
+                this.isDie = true;
+                this.onUpdate = null;
+                this.display.removeFromParent();
+                var textures = Hilo.TextureAtlas.createSpriteFrames([
+                    ["die", "0-7", resource.get("playerDie" + (this.playerNum + 1)), 79, 49, false, 200]
+                ]);
+                this.display = new Sprite({
+                    frames:textures,
+                    loop:true,
+                    timeBased:true
+                });
+                this.addChild(this.display);
+                this.display.play();
+            }
         },
         getInput:function(data){
             return input[data + this.playerNum];
@@ -171,7 +188,11 @@ KISSY.add("kill/player", function(S, resource, input){
             });
         }
     })
+
+    mediator.on("playerDied", function(d){
+        d.player.die()
+    });
     return Player;
 },{
-    requires:["kill/resource", "kill/input"]
+    requires:["kill/resource", "kill/input", "kill/mediator"]
 });

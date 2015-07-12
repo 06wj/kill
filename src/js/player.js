@@ -31,7 +31,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                 timeBased:true
             });
             this.addChild(this.display);
-            this.display.goto("walk");
+            this.play("walk");
 
             this.bangArr = _game.bangArr;
 
@@ -39,6 +39,12 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
             this.height = 39;
             this.halfWidth = this.width * .5;
             this.halfHeight = this.height * .5;
+        },
+        play:function(animName){
+            if(this._currentAnim !== animName){
+                this._currentAnim = animName;
+                this.display.goto(animName);
+            }
         },
         die:function(){
             if(!this.isDie){
@@ -108,6 +114,15 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
             }
 
             var isHold = that.getInput("hold");
+            if(isHold){
+                this.play("push");
+            }
+            else if(this.vx || this.vy){
+                this.play("walk");
+            }
+            else{
+                this.play("state");
+            }
 
             this.bangArr.forEach(function(bang){
                 var left = that.x - that.halfWidth;

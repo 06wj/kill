@@ -165,21 +165,21 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     y:0,
                     width:game.left + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .3)"
+                    background:"rgba(255, 0, 0, .1)"
                 }),
                 new View({
                     x:game.right - 10,
                     y:0,
                     width:1000-game.right + 10,
                     height:800,
-                    background:"rgba(255, 0, 0, .3)"
+                    background:"rgba(255, 0, 0, .1)"
                 })
             ];
 
-            // stage.addChild(this.hengRects[2]);
-            // stage.addChild(this.hengRects[3]);
-            // stage.addChild(this.shuRects[2]);
-            // stage.addChild(this.shuRects[3]);
+            stage.addChild(this.hengRects[2]);
+            stage.addChild(this.hengRects[3]);
+            stage.addChild(this.shuRects[2]);
+            stage.addChild(this.shuRects[3]);
         },
         checkCollision:function(){
             var that = this;
@@ -199,7 +199,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                                 hengRects[hj].hitTestObject(shuRects[sj]) &&
                                 shuRects[sj].hitTestObject(hengRects[hi])
                             ){
-                                console.log("rect")
+                                var monsters = that._getMonster([hengRects[hi], hengRects[hj], shuRects[hi], shuRects[hj]])
                             }
                         }
                     }
@@ -207,8 +207,22 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             }
 
         },
-        _getMonster:function(){
+        _getMonster:function(rects){
+            var that = this;
+            var left = 1000, right = 0, top = 800, bottom = 0;
+            rects.forEach(function(rect){
+                left = Math.min(left, rect.x);
+                top = Math.min(top, rect.y);
+                right = Math.max(right, rect.x + rect.width);
+                bottom = Math.max(bottom, rect.y + rect.height);
+            });
 
+            this.monsterArr.forEach(function(monster){
+                if(monster.x >= left && monster.x + monster.width <= right && monster.y >= top && monster.y + monster.height <= bottom){
+                    monster.die && monster.die();
+                    console.log("monster die")
+                }
+            });
         }
     };
 

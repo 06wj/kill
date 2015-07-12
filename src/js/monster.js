@@ -119,8 +119,6 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 				timeBased:true
 			});
 
-			this.colliders = _game.shuRects + _game.hengRects;
-
 			this.width = 35;
 			this.height = 40;
 			this.pivotX = this.width*.5;
@@ -177,6 +175,8 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 					if(!qiang.hitTestObject(that)){
 						that.vx = Math.abs(that.vx);
+						that.scaleX =  -that.scaleX
+
 						break;
 					}
 					else{
@@ -188,6 +188,8 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 					if(!qiang.hitTestObject(that)){
 						that.vx = -Math.abs(that.vx);
+						that.scaleX =  -that.scaleX
+
 						break;
 					}
 					else{
@@ -260,6 +262,7 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 					if(!bang.hitTestObject(that)){
 						that.vx = Math.abs(that.vx);
+						that.scaleX =  -that.scaleX
 						break;
 					}
 					else{
@@ -271,6 +274,7 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 					if(!bang.hitTestObject(that)){
 						that.vx = -Math.abs(that.vx);
+						that.scaleX =  -that.scaleX
 						break;
 					}
 					else{

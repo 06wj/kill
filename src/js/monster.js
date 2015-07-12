@@ -152,11 +152,11 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			var right = that.x + that.width/2;
 			var bottom = that.y + that.height/2;
 
-			var b = null;
-			_game.bangArr.forEach(function(bang){
+			var bang = null;
 
+			for(var i = 0,len = _game.bangArr.length; i < len; i++){
+				bang = _game.bangArr[i];
 				if(bang.hitTestObject(that)){
-					b = bang;
 
 					var bangLeft = bang.x;
 					var bangRight = bang.x + bang.width;
@@ -164,42 +164,37 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 					var bangBottom = bang.y + bang.height;
 
 					//第一，二，三四象限
-					var A = (that.vx > 0 && that.vy < 0);
-					var B = (that.vx > 0 && that.vy > 0);
-					var C = (that.vx < 0 && that.vy > 0);
-					var D = (that.vx < 0 && that.vy < 0);
+					var A = (top < bangTop && left > bangLeft);
+					var B = (top >= bangTop && left <= bangLeft);
+					var C = (bottom > bangBottom && right < bangRight);
+					var D = (bottom <= bangBottom && right >= bangRight);
+
 
 					if(A){
-						that.x += 30;
-						that.y -= 30;
+						that.vy = - that.vy;
 
-//						console.log("A",right - bangLeft,top - bangBottom);
+						that.y -=10;
 					}
 
 					if(B){
-						that.x += 30;
-						that.y += 30;
+						that.vx = - that.vx;
 
-//						console.log("B",right - bangLeft,bottom - bangTop);
+						that.x -=10;
 					}
 
 					if(C){
-						that.x -= 30;
-						that.y += 30;
+						that.vy = - that.vy;
 
-//						console.log("C");
+						that.y +=10;
 					}
 
 					if(D){
-						that.x -= 30;
-						that.y -= 30;
-
-//						console.log("D");
+						that.vx = - that.vx;
 					}
 
-					that.vy = - that.vy;
+					break;
 				}
-			});
+			}
 
 			_game.playerArr.forEach(function(player){
 

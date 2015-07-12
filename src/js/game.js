@@ -100,7 +100,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
 	        var monsterArr = this.monsterArr = [];
 	        var m = new Monster({
-		        x: 200, y: 100
+		        x: 500, y: 100
 	        });
 	        m.state = MonsterState.WAKE;
 	        this.stage.addChild(m);
@@ -110,22 +110,22 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 		        x: 200, y: 110
 	        });
 	        m1.state = MonsterState.WAKE;
-//	        this.stage.addChild(m1);
-//	        monsterArr.push(m1);
+	        this.stage.addChild(m1);
+	        monsterArr.push(m1);
 
 	        var m2 = new Monster({
 		        x: 200, y: 120
 	        });
 	        m2.state = MonsterState.WAKE;
-//	        this.stage.addChild(m2);
-//	        monsterArr.push(m2);
+	        this.stage.addChild(m2);
+	        monsterArr.push(m2);
 
 	        var m3 = new Monster({
 		        x: 200, y: 200
 	        });
 	        m3.state = MonsterState.WAKE;
-//	        this.stage.addChild(m3);
-//	        monsterArr.push(m3);
+	        this.stage.addChild(m3);
+	        monsterArr.push(m3);
 
 
             var bgTop = new Bitmap({

@@ -113,6 +113,7 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 			]);
 			this.display = new Hilo.Sprite({
 				y:-22,
+				x: -10,
 				frames:textures,
 				loop:true,
 				timeBased:true
@@ -120,7 +121,7 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 			this.colliders = _game.shuRects + _game.hengRects;
 
-			this.width = 54;
+			this.width = 35;
 			this.height = 40;
 			this.pivotX = this.width*.5;
 			this.pivotY = this.height*.5;
@@ -167,34 +168,7 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 			var right = that.x + that.width/2;
 			var bottom = that.y + that.height/2;
 
-			var bang = null;
-
-//			if(left < _game.left){
-//				this.x = _game.left + this.width/2;
-//
-//				if(that.lastVy * that.vy < 0){
-//					that.vy = - that.vy;
-//				}
-//
-//			}
-//
-//			if(top < _game.top){
-//				this.y = _game.top + this.height/2;
-//				that.vy = - that.vy;
-//			}
-//
-//			if(right > _game.right){
-//				this.x = _game.right - this.width/2;
-//				that.vx = - that.vx;
-//			}
-//
-//			if(bottom > _game.bottom){
-//				this.y = _game.bottom - this.height/2;
-//				that.vy = - that.vy;
-//			}
-//
-
-			var qiang,sniffer = 5;
+			var qiang,sniffer = 20;
 			for(var i = 0, len = _game.qiangs.length; i < len; i++){
 				qiang = _game.qiangs[i];
 				if(qiang.hitTestObject(that)){
@@ -239,12 +213,47 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 					else{
 						that.y += sniffer;
 					}
+
+					that.vx = 0;
+					that.vy = 0;
 				}
 			}
 
+
+
+			left = that.x - that.width/2;
+			top = that.y - that.height/2;
+			right = that.x + that.width/2;
+			bottom = that.y + that.height/2;
+
 			var bang;
 			for(var i = 0, len = _game.bangArr.length; i < len; i++){
+
 				bang = _game.bangArr[i];
+
+				if(left < _game.left){
+					bang.vx = -bang.lastVx;
+				}
+
+				if(top < _game.top){
+					that.y = _game.top + that.height/2;
+
+					bang.vy = -bang.lastVy;
+				}
+
+				if(right > _game.right){
+					that.x = _game.right - that.width/2;
+
+					bang.vx = -bang.lastVx;
+				}
+
+				if(bottom > _game.bottom){
+					that.y = _game.bottom - that.height/2;
+
+					bang.vy = -bang.lastVy;
+				}
+
+
 				if(bang.hitTestObject(that)){
 
 					that.x += sniffer;
@@ -287,7 +296,34 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 					else{
 						that.y += sniffer;
 					}
+
+					that.vx = 0;
+					that.vy = 0;
 				}
+			}
+
+
+			for(var i = 0, len = _game.bangArr.length; i < len; i++){
+				bang = _game.bangArr[i];
+
+				if(!bang.hitTestObject(that)){
+					continue;
+				}
+			}
+
+
+
+			for(var j = 0, len = _game.qiangs.length; j < len; j++){
+				qiang = _game.qiangs[j];
+
+				if(!qiang.hitTestObject(that)){
+					continue;
+				}
+			}
+
+			if(i == len && j == len && that.vx == 0 && that.vy == 0){
+				that.vx = 2 + Math.random();
+				that.vy = 2 + Math.random();
 			}
 
 

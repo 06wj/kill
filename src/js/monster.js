@@ -194,35 +194,20 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 			that.frame++;
 
 			if (that.isboss) {
-
-				;
 				if (that.vx == 0 && that.vy == 0) {
-					if(that.frame % that.coolingTime == 0){
-						for (var i = 0, len = _game.playerArr.length; i < len; i++) {
-							if (!_game.playerArr[i].isDie) {
-								that.bossPig = _game.playerArr[i];
 
-								that.bossDis = 0;
-								break;
-							}
+					for (var i = 0, len = _game.playerArr.length; i < len; i++) {
+						if (!_game.playerArr[i].isDie) {
+							that.bossPig = _game.playerArr[i];
+
+							that.bossDis = 0;
+							break;
 						}
+					}
 
-						if (len == i) {
-							Event.fire("gameover", {});
-							return;
-						}
-						else{
-							var deltaX = that.bossPig.x - that.x;
-							var deltaY = that.bossPig.y - that.y;
-
-							var val = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-							var vx = deltaX / val * 4;
-							var vy = deltaY / val * 4;
-
-							that.vx = vx;
-							that.vy = vy;
-						}
+					if (len == i) {
+						Event.fire("gameover", {});
+						return;
 					}
 				}
 
@@ -236,6 +221,18 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 					});
 				}
 				else {
+
+					var deltaX = that.bossPig.x - that.x;
+					var deltaY = that.bossPig.y - that.y;
+
+					var val = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+					var vx = deltaX / val * 1;
+					var vy = deltaY / val * 1;
+
+					that.vx = vx;
+					that.vy = vy;
+
 					that.x += that.vx;
 					that.y += that.vy;
 

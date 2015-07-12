@@ -72,13 +72,9 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var playerArr = this.playerArr;
             var monsterArr = this.monsterArr;
 
-<<<<<<< HEAD
-	        var m3 = new Monster({
-		        x: 500, y: 300, type: "boss"
-	        });
-	        this.stage.addChild(m3);
-	        monsterArr.push(m3);
-=======
+
+
+
             var state = states.getState(stateIndex);
             if(!state){
                 alert("棒！已通关！");
@@ -86,7 +82,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 that._initGame(0);
                 return;
             }
->>>>>>> c1d999a2dad44688cdf1473fff7afc1c4ac3bb18
+
 
             state.bangs.forEach(function(bangCfg){
                 var bang = new Bang(bangCfg);

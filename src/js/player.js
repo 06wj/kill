@@ -47,6 +47,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
             }
         },
         die:function(){
+            var that = this;
             if(!this.isDie){
                 this.isDie = true;
                 this.onUpdate = null;
@@ -61,6 +62,13 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                 });
                 this.addChild(this.display);
                 this.display.play();
+
+                setTimeout(function(){
+                    that.display.removeFromParent();
+                    mediator.fire("playerGameOver", {
+                        player:that
+                    });
+                }, 2000);
             }
         },
         getInput:function(data){
@@ -208,7 +216,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                 }
             });
         }
-    })
+    });
 
     mediator.on("playerDied", function(d){
         if(!config.god){

@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster, Background){
+KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster, Background, states){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -24,159 +24,109 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             mediator.on("gameLoadComplete", function(){
                 that._initGame();
             });
+
+            mediator.on("playerGameOver", function(d){
+                var index = that.playerArr.indexOf(d.player);
+                if(index > -1){
+                    that.playerArr.splice(index, 1);
+                    if(that.playerArr.length <= 0){
+                        alert("gameOver");
+                        that.reset();
+                        that._initGame(0);
+                    }
+                }
+            });
         },
-        _initGame:function(){
+        _initGame:function(stateIndex){
             var that = this;
+            stateIndex = stateIndex || 0;
             if(!that._isInit){
                 this._isInit = true;
-                var stage = this.stage = new Stage({
+                this.stage = new Stage({
                     container:this.gameContainer,
                     width:config.game.width,
                     height:config.game.height
                 });
                 var ticker = this.ticker = new Ticker(config.fps);
-                ticker.addTick(stage);
+                ticker.addTick(this.stage);
                 ticker.addTick(Tween);
                 ticker.start();
+
+                this._initBg();
+
+                this.bangArr = [];
+                this.playerArr = [];
+                this.monsterArr = [];
+
+                this.stateMask = new View({
+                    x:0,
+                    y:0,
+                    width:1000,
+                    height:600,
+                    background:"#000"
+                });
             }
 
-            var bg = this.bg = new Background();
-            this.stage.addChild(bg);
+            var stage = this.stage;
+            var bangArr = this.bangArr;
+            var playerArr = this.playerArr;
+            var monsterArr = this.monsterArr;
 
-            var bangArr = this.bangArr = [];
-            var bang = window._bang = new Bang({
-                x:200,
-                y:300,
-                length:200,
-                rotation:0
+            var state = states.getState(stateIndex);
+            if(!state){
+                alert("棒！已通关！");
+                that.reset();
+                that._initGame(0);
+                return;
+            }
+
+            state.bangs.forEach(function(bangCfg){
+                var bang = new Bang(bangCfg);
+                stage.addChild(bang);
+                bangArr.push(bang);
             });
-            this.stage.addChild(bang);
-            bangArr.push(bang);
 
-            var bang = window._bang = new Bang({
-                x:700,
-                y:100,
-                rotation:90,
-                length:300
+            state.monsters.forEach(function(monsterCfg){
+                var m = new Monster(monsterCfg);
+                stage.addChild(m);
+                monsterArr.push(m);
             });
-            this.stage.addChild(bang);
-            bangArr.push(bang);
 
-            var bang = window._bang = new Bang({
-                x:200,
-                y:400,
-                length:200,
-                rotation:0
+            state.players.forEach(function(playerCfg){
+                var player = new Player(playerCfg);
+                stage.addChild(player);
+                playerArr.push(player);
             });
-            this.stage.addChild(bang);
-            bangArr.push(bang);
-
-            var bang = window._bang = new Bang({
-                x:100,
-                y:100,
-                rotation:90,
-                length:300
-            });
-            this.stage.addChild(bang);
-            bangArr.push(bang);
-
-            var playerArr = this.playerArr = [];
-            var player = window._player = new Player({
-                x:50,
-                y:300,
-                playerNum:0
-            });
-            this.stage.addChild(player);
-            playerArr.push(player);
-
-            var player = window._player = new Player({
-                x:750,
-                y:300,
-                playerNum:1
-            });
-            this.stage.addChild(player);
-            playerArr.push(player);
-
-
-	        var monsterArr = this.monsterArr = [];
-	        var m = new Monster({
-		        x: 500, y: 100
-	        });
-	        this.stage.addChild(m);
-	        monsterArr.push(m);
-
-	        var m1 = new Monster({
-		        x: 200, y: 110
-	        });
-	        this.stage.addChild(m1);
-	        monsterArr.push(m1);
-
-	        var m2 = new Monster({
-		        x: 200, y: 120
-	        });
-	        this.stage.addChild(m2);
-	        monsterArr.push(m2);
-
-	        var m3 = new Monster({
-		        x: 200, y: 200
-	        });
-	        this.stage.addChild(m3);
-	        monsterArr.push(m3);
-
-
-            var bgTop = new Bitmap({
-                image:resource.get("roadTop"),
-                y:600,
-                pivotY:resource.get("roadTop").height
-            }).addTo(this.stage);
-
-            this.stage.onUpdate = function(){
-                that.checkCollision();
-            };
 
             this.hengRects = [
                 this.bangArr[0],
                 this.bangArr[2],
-                new View({
-                    x:0,
-                    y:0,
-                    width:1000,
-                    height:game.top + 10
-                }),
-                new View({
-                    x:0,
-                    y:game.bottom - 10,
-                    width:1000,
-                    height:800-game.bottom + 10
-                })
+                this.leftWall,
+                this.rightWall
             ];
 
             this.shuRects = [
                 this.bangArr[1],
                 this.bangArr[3],
-                new View({
-                    x:0,
-                    y:0,
-                    width:game.left + 10,
-                    height:800
-                }),
-                new View({
-                    x:game.right - 10,
-                    y:0,
-                    width:1000-game.right + 10,
-                    height:800
-                })
+                this.topWall,
+                this.bottomWall
             ];
-
-            stage.addChild(this.hengRects[2]);
-            stage.addChild(this.hengRects[3]);
-            stage.addChild(this.shuRects[2]);
-            stage.addChild(this.shuRects[3]);
-
-            this.qiangs = [this.hengRects[2],this.hengRects[3],this.shuRects[2],this.shuRects[3]];
-
-            if(config.showHit){
-                this.hengRects[2].background = this.hengRects[3].background = this.shuRects[2].background = this.shuRects[3].background = "rgba(255, 0, 0, .3)";
+        },
+        reset:function(){
+            while(this.bangArr.length){
+                    var bang = this.bangArr.pop();
+                    bang.destroy && bang.destroy();
+                    bang.removeFromParent();
+                }
+            while(this.monsterArr.length){
+                var bang = this.monsterArr.pop();
+                bang.destroy && bang.destroy();
+                bang.removeFromParent();
+            }
+            while(this.playerArr.length){
+                var bang = this.playerArr.pop();
+                bang.destroy && bang.destroy();
+                bang.removeFromParent();
             }
         },
         checkCollision:function(){
@@ -213,15 +163,96 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var bottom = Math.max(h0.y + h0.height, h1.y + h1.height);
 
 
-            this.monsterArr.forEach(function(monster){
+            this.monsterArr.forEach(function(monster, index){
                 if(!monster.isDie && monster.x >= left && monster.x + monster.width <= right && monster.y >= top && monster.y + monster.height <= bottom){
                     monster.die && monster.die();
+                    that.monsterArr.splice(index, 1);
+                    if(that.monsterArr.length <= 0){
+                        that._nextState();
+                    }
                 }
             });
+        },
+        _nextState:function(){
+            var that = this;
+            console.log("nextState", states.index + 1);
+            this.playerArr.forEach(function(player){
+                player.onUpdate = null;
+                player.play("win");
+            });
+            setTimeout(function(){
+                that.stateMask.alpha = 0;
+                that.stage.addChild(that.stateMask);
+                Tween.to(that.stateMask, {
+                    alpha:1
+                },{
+                    duration:500,
+                    onComplete:function(){
+                        that.reset();
+                        Tween.to(that.stateMask, {
+                            alpha:0
+                        },{
+                            duration:800,
+                            onComplete:function(){
+                                that._initGame(states.index + 1);
+                            }
+                        })
+                    }
+                })
+            }, 2000);
+        },
+        _initBg:function(){
+            var that = this;
+            var bgTop = new Bitmap({
+                image:resource.get("roadTop"),
+                y:600,
+                pivotY:resource.get("roadTop").height
+            }).addTo(this.stage);
+
+            this.stage.onUpdate = function(){
+                that.checkCollision();
+            };
+
+            var bg = this.bg = new Background();
+            this.stage.addChild(bg);
+
+            this.leftWall = new View({
+                x:0,
+                y:0,
+                width:1000,
+                height:this.top + 10
+            });
+
+            this.rightWall = new View({
+                x:0,
+                y:this.bottom - 10,
+                width:1000,
+                height:800-this.bottom + 10
+            });
+
+            this.topWall = new View({
+                x:0,
+                y:0,
+                width:this.left + 10,
+                height:800
+            });
+
+            this.bottomWall = new View({
+                x:this.right - 10,
+                y:0,
+                width:1000-this.right + 10,
+                height:800
+            });
+
+            this.stage.addChild(this.leftWall, this.rightWall, this.topWall, this.bottomWall);
+            this.qiangs = [this.leftWall, this.rightWall, this.topWall, this.bottomWall];
+            if(config.showHit){
+                this.leftWall.background = this.rightWall.background = this.topWall.background = this.bottomWall.background = "rgba(255, 0, 0, .3)";
+            }
         }
     };
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster", "kill/background"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster", "kill/background", "kill/states"]
 });

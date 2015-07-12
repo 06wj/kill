@@ -30,9 +30,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 if(index > -1){
                     that.playerArr.splice(index, 1);
                     if(that.playerArr.length <= 0){
-                        alert("gameOver");
-                        that.reset();
-                        that._initGame(0);
+                        that._showGameEnd("gameover");
                     }
                 }
             });
@@ -74,9 +72,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
             var state = states.getState(stateIndex);
             if(!state){
-                alert("棒！已通关！");
-                that.reset();
-                that._initGame(0);
+                that._showGameEnd("win");
                 return;
             }
 
@@ -127,6 +123,18 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 var bang = this.playerArr.pop();
                 bang.destroy && bang.destroy();
                 bang.removeFromParent();
+            }
+        },
+        _showGameEnd:function(type){
+            var that = this;
+            this.endBg = this.endBg||document.getElementById("startBg");
+            this.endBg.style.display = "block";
+            this.endBg.style.background = "url(../src/img/" + type + "Bg.jpg)"
+            this.endBg.onclick = function(){
+                that.endBg.onclick = null;
+                that.endBg.style.display = "none";
+                that.reset();
+                that._initGame(0);
             }
         },
         checkCollision:function(){

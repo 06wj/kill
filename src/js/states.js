@@ -3,17 +3,17 @@ KISSY.add("kill/states", function(){
         //----------------------- stage 1 ----------------------------
         {
             bangs:[{
-                   x:400,
-                    y:300,
-                    length:300,
+                   x:300,
+                    y:200,
+                    length:200,
                     rotation:0,
                 },{
-                    x:700,
+                    x:900,
                     y:100,
                     rotation:90,
                     length:300
                 },{
-                    x:200,
+                    x:300,
                     y:400,
                     length:200,
                     rotation:0
@@ -27,7 +27,7 @@ KISSY.add("kill/states", function(){
             monsters:[{
                     x: 450,
                     y: 250,
-                    type:"boss",
+                    type:"normal",
                     isMove:false
                 },
                 {
@@ -328,11 +328,11 @@ KISSY.add("kill/states", function(){
             ]
         }
     ];
-
+    arr.length = 1
     var states = {
         index:0,
         getState:function(index){
-            this.index = index;
+            this.index = parseInt(index);
             return arr[index];
         }
     };

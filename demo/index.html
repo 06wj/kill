@@ -21,6 +21,7 @@
             width: 1000px;
             height: 600px;
             background: url(../src/img/startBg.png);
+            z-index: 1;
         }
 
         .container{
@@ -48,7 +49,6 @@
     KISSY.config({
         packages: {
             "kill": {
-//                tag: new Date().getTime(),
                 base: __killPath + "js/",
                 charset: "utf-8",
                 debug: true,
@@ -58,10 +58,11 @@
         }
     });
     KISSY.use("kill/game", function(S, game){
-        var isInit = false;
         document.body.onclick = function(){
-            if(!isInit){
-                isInit = true;
+            document.getElementById("startBg").style.background = "url(../src/img/infoBg.jpg)";
+            document.body.onclick = function(){
+                document.body.onclick = null;
+                document.getElementById("startBg").style.display = "none";
                 game.init(document.getElementById("game"));
             }
         }
@@ -69,3 +70,4 @@
     </script>
 </body>
 </html>
+

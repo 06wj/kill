@@ -4,24 +4,7 @@
 
 KISSY.add("kill/monster", function (S,resource,Event) {
 
-	var Manager = {
-		pepole: {
-			x: 500,
-			y: 500
-		},
-		sticks: []
-	}
 
-	window.MonsterState = {
-		IDLE: "IDLE",
-		WAKE: "WAKE",
-		COLLIDEWITHSTICK: "COLLIDEWITHSTICK",
-		WALKINGONSTICK: "WALKINGONSTICK",
-		WAKINGONSTICKEND: "WAKINGONSTICKEND",
-		LEAVESTICK: "LEAVESTICK",
-		WALKING: "WALKING",
-		NIL: "NIL"
-	}
 
 	var IDLEDIR = {
 		P: "P",
@@ -100,12 +83,11 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 		constructor: function(properties){
 			Hilo.Container.call(this, properties);
 
-			this.state = MonsterState.IDLE;
 
 			this.idleDir = IDLEDIR.P;
 
-			this.vx = 2 + Math.random();
-			this.vy = 2 + Math.random();
+			this.lastVx = this.vx = 2 + Math.random();
+			this.lastVy = this.vy = 2 + Math.random();
 
 //			this.vx = 0;
 //			this.vy = 0;
@@ -133,6 +115,8 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 				loop:true,
 				timeBased:true
 			});
+
+			this.colliders = _game.shuRects + _game.hengRects;
 
 			this.width = 54;
 			this.height = 40;
@@ -183,100 +167,246 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 
 			var bang = null;
 
-			for(var i = 0,len = _game.bangArr.length; i < len; i++){
+//			if(left < _game.left){
+//				this.x = _game.left + this.width/2;
+//
+//				if(that.lastVy * that.vy < 0){
+//					that.vy = - that.vy;
+//				}
+//
+//			}
+//
+//			if(top < _game.top){
+//				this.y = _game.top + this.height/2;
+//				that.vy = - that.vy;
+//			}
+//
+//			if(right > _game.right){
+//				this.x = _game.right - this.width/2;
+//				that.vx = - that.vx;
+//			}
+//
+//			if(bottom > _game.bottom){
+//				this.y = _game.bottom - this.height/2;
+//				that.vy = - that.vy;
+//			}
+//
+
+			var qiang,sniffer = 5;
+			for(var i = 0, len = _game.qiangs.length; i < len; i++){
+				qiang = _game.qiangs[i];
+				if(qiang.hitTestObject(that)){
+
+					that.x += sniffer;
+
+					if(!qiang.hitTestObject(that)){
+						that.vx = Math.abs(that.vx);
+						break;
+					}
+					else{
+						that.x -= sniffer;
+					}
+
+
+					that.x -= sniffer;
+
+					if(!qiang.hitTestObject(that)){
+						that.vx = -Math.abs(that.vx);
+						break;
+					}
+					else{
+						that.x += sniffer;
+					}
+
+					that.y += sniffer;
+
+					if(!qiang.hitTestObject(that)){
+						that.vy = Math.abs(that.vy);
+						break;
+					}
+					else{
+						that.y -= sniffer;
+					}
+
+					that.y -= sniffer;
+
+					if(!qiang.hitTestObject(that)){
+						that.vy = -Math.abs(that.vy);
+						break;
+					}
+					else{
+						that.y += sniffer;
+					}
+				}
+			}
+
+			var bang;
+			for(var i = 0, len = _game.bangArr.length; i < len; i++){
 				bang = _game.bangArr[i];
 				if(bang.hitTestObject(that)){
 
-					var bangLeft = bang.x;
-					var bangRight = bang.x + bang.width;
-					var bangTop = bang.y;
-					var bangBottom = bang.y + bang.height;
+					that.x += sniffer;
 
-					//第一，二，三四象限
-					var A = (top < bangTop && left > bangLeft);
-					var B = (top >= bangTop && left <= bangLeft);
-					var C = (bottom > bangBottom && right < bangRight);
-					var D = (bottom <= bangBottom && right >= bangRight);
-
-
-					if(A){
-						that.vy = - that.vy;
-
-						that.y -=10;
-
-						while(bang.hitTestObject(that)){
-							that.y -=10;
-						}
+					if(!bang.hitTestObject(that)){
+						that.vx = Math.abs(that.vx);
+						break;
+					}
+					else{
+						that.x -= sniffer;
 					}
 
-					if(B){
-						that.vx = - that.vx;
 
-						that.x -=10;
+					that.x -= sniffer;
 
-						while(bang.hitTestObject(that)){
-							that.x -=10;
-						}
+					if(!bang.hitTestObject(that)){
+						that.vx = -Math.abs(that.vx);
+						break;
+					}
+					else{
+						that.x += sniffer;
 					}
 
-					if(C){
-						that.vy = - that.vy;
+					that.y += sniffer;
 
-						that.y +=10;
-
-						while(bang.hitTestObject(that)){
-							that.y +=10;
-						}
+					if(!bang.hitTestObject(that)){
+						that.vy = Math.abs(that.vy);
+						break;
+					}
+					else{
+						that.y -= sniffer;
 					}
 
-					if(D){
-						that.vx = - that.vx;
+					that.y -= sniffer;
 
-						that.x +=10;
-
-						while(bang.hitTestObject(that)){
-							that.x +=10;
-						}
+					if(!bang.hitTestObject(that)){
+						that.vy = -Math.abs(that.vy);
+						break;
 					}
-
-					break;
+					else{
+						that.y += sniffer;
+					}
 				}
 			}
+
+
+//			for(i = 0,len = _game.bangArr.length; i < len; i++){
+//
+//				bang = _game.bangArr[i];
+//				if(bang.hitTestObject(that)){
+//
+//					var bangLeft = bang.x;
+//					var bangRight = bang.x + bang.width;
+//					var bangTop = bang.y;
+//					var bangBottom = bang.y + bang.height;
+//
+//					//第一，二，三四象限
+//					var A = (top < bangTop && left > bangLeft);
+//					var B = (top >= bangTop && left <= bangLeft);
+//					var C = (bottom > bangBottom && right < bangRight);
+//					var D = (bottom <= bangBottom && right >= bangRight);
+//
+//
+//					if(A){
+//						that.vy = - that.vy;
+//
+//						that.y -=10;
+//
+//						while(bang.hitTestObject(that)){
+//							that.y -=10;
+//						}
+//					}
+//
+//					if(B){
+//						that.vx = - that.vx;
+//
+//						that.x -=10;
+//
+//						while(bang.hitTestObject(that)){
+//							that.x -=10;
+//						}
+//					}
+//
+//					if(C){
+//						that.vy = - that.vy;
+//
+//						that.y +=10;
+//
+//						while(bang.hitTestObject(that)){
+//							that.y +=10;
+//						}
+//					}
+//
+//					if(D){
+//						that.vx = - that.vx;
+//
+//						that.x +=10;
+//
+//						while(bang.hitTestObject(that)){
+//							that.x +=10;
+//						}
+//					}
+//
+//
+//					if(left < _game.left){
+//						that.x = _game.left + that.width/2;
+//						that.vx = 0;
+//						//bang.x = that.x + that.width;
+//
+//						bang.vx = -bang.lastVx;
+//
+//						if(that.lastVy * that.vy < 0){
+//							that.vy = - that.vy;
+//						}
+//					}
+//
+//					if(top < _game.top){
+//						that.y = _game.top + that.height/2;
+//
+//						bang.y = that.y + that.height;
+//						bang.vx = 0;
+//						bang.vy = 0;
+//						that.vy = - that.vy;
+//					}
+//
+//					if(right > _game.right){
+//						that.x = _game.right - that.width/2;
+//
+//						bang.vx = 0;
+//						bang.vy = 0;
+//
+//						bang.x = _game.right - that.width;
+//						that.vx = - that.vx;
+//					}
+//
+//					if(bottom > _game.bottom){
+//						that.y = _game.bottom - that.height/2;
+//
+//						bang.vx = 0;
+//						bang.vy = 0;
+//
+//						bang.y = _game.bottom - that.height;
+//						that.vy = - that.vy;
+//					}
+//
+//					break;
+//				}
+//			}
 
 			_game.playerArr.forEach(function(player){
 
 				if(player.hitTestObject(that)){
-					Event.fire("playerDied",{
-						player:player
-					});
+//					Event.fire("playerDied",{
+//						player:player
+//					});
 				}
 			});
 
 
-			if(left < _game.left){
-				this.x = _game.left + this.width/2;
-				that.vx = - that.vx;
-			}
-
-			if(top < _game.top){
-				this.y = _game.top + this.height/2;
-				that.vy = - that.vy;
-			}
-
-			if(right > _game.right){
-				this.x = _game.right - this.width/2;
-				that.vx = - that.vx;
-			}
-
-			if(bottom > _game.bottom){
-				this.y = _game.bottom - this.height/2;
-				that.vy = - that.vy;
-			}
-
-
-
 			this.x += this.vx;
 			this.y += this.vy;
+
+			that.lastVx = that.vx;
+			that.lastVy = that.vy;
 		}
 	});
 

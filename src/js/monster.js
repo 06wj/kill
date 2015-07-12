@@ -125,7 +125,7 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
 				["state", "0-1", resource.get("monster1"), 54, 64, true, 300],
 				["walk", "2-5", resource.get("monster1"), 54, 64, true, 300],
-				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 300]
+				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 100]
 			]);
 			this.display = new Hilo.Sprite({
 				y:-22,
@@ -150,10 +150,27 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 			if(!this.isDie){
 				this.isDie = true;
 				this.display.goto("die");
+				this.display.interval = 10;
 				this.onUpdate = null;
 				setTimeout(function(){
-					that.removeFromParent();
-				}, 2000);
+					var textures = Hilo.TextureAtlas.createSpriteFrames([
+						["state", "0-5", resource.get("monsterDie"), 38, 40, false, 100]
+					]);
+					that.display.removeFromParent();
+					that.display = new Hilo.Sprite({
+						y:0,
+						x:that.width*.5,
+						pivotX:19,
+						frames:textures,
+						loop:true,
+						timeBased:true
+					});
+					that.addChild(that.display);
+					that.display.play();
+					setTimeout(function(){
+						that.removeFromParent();
+					}, 1000);
+				}, 300);
 			}
 		},
 		onUpdate: function () {

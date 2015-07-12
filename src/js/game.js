@@ -82,16 +82,16 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
             var playerArr = this.playerArr = [];
             var player = window._player = new Player({
-                x:150,
-                y:200,
+                x:50,
+                y:300,
                 playerNum:0
             });
             this.stage.addChild(player);
             playerArr.push(player);
 
             var player = window._player = new Player({
-                x:650,
-                y:200,
+                x:750,
+                y:300,
                 playerNum:1
             });
             this.stage.addChild(player);

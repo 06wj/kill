@@ -17,7 +17,8 @@ KISSY.add("kill/resource", function(S, mediator, config){
         {id:"hshadow", src:"stick/hshadow.png"},
         {id:"hstart", src:"stick/hstart.png"},
         {id:"monster1", src:"monster1.png"},
-        {id:"monsterDie", src:"monsterDie.png"}
+        {id:"monsterDie", src:"monsterDie.png"},
+        {id:"boss1", src:"boss1.png"}
     ];
 
     S.each(res, function(r){

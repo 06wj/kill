@@ -2,8 +2,7 @@
  * Created by admin on 15/7/10.
  */
 
-KISSY.add("kill/monster", function (S,resource,Event, config) {
-
+KISSY.add("kill/monster", function (S, resource, Event, config) {
 
 
 	var IDLEDIR = {
@@ -80,14 +79,12 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 	}
 
 	var Monster = Hilo.Class.create({
-		constructor: function(properties){
+		constructor: function (properties) {
 			Hilo.Container.call(this, properties);
 
 
 			this.idleDir = IDLEDIR.P;
 
-			this.lastVx = this.vx = 2 + Math.random();
-			this.lastVy = this.vy = 2 + Math.random();
 
 //			this.vx = 0;
 //			this.vy = 0;
@@ -102,57 +99,91 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 				maxY: this.y + this.r
 			}
 
-			if(config.showHit){
+			if (config.showHit) {
 				this.background = "rgba(0,255,0,.4)";
 			}
 
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
 				["state", "0-1", resource.get("monster1"), 54, 64, true, 300],
+				["boss1", "0", resource.get("boss1"), 74, 72, true, 300],
 				["walk", "2-5", resource.get("monster1"), 54, 64, true, 300],
 				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 100]
 			]);
+
+			var dims = {
+				x: -22,
+				y: -10,
+				w: 35,
+				h: 40
+			}
+
+			if (properties.type && properties.type == "boss") {
+				this.isboss = true;
+				dims.x = 0;
+				dims.y = 0;
+				dims.w = 60;
+				dims.h = 72;
+			}
+
 			this.display = new Hilo.Sprite({
-				y:-22,
-				x: -10,
-				frames:textures,
-				loop:true,
-				timeBased:true
+				y: dims.x,
+				x: dims.y,
+				frames: textures,
+				loop: true,
+				timeBased: true
 			});
 
-			this.width = 35;
-			this.height = 40;
-			this.pivotX = this.width*.5;
-			this.pivotY = this.height*.5;
-			this.scaleX =  1;
+			this.width = dims.w;
+			this.height = dims.h;
+			this.pivotX = this.width * .5;
+			this.pivotY = this.height * .5;
+			this.scaleX = 1;
 			this.scaleY = 1;
+			this.frame = 0;
 
 			this.addChild(this.display);
-			this.display.goto("walk");
+
+			if (this.isboss) {
+				this.lastVx = this.vx = 0;
+				this.lastVy = this.vy = 0;
+
+				this.bossDis = 0;
+				this.coolingTime = 100;
+
+				this.display.goto("boss1");
+			}
+			else {
+				this.lastVx = this.vx = 2 + Math.random();
+				this.lastVy = this.vy = 2 + Math.random();
+
+				this.display.goto("walk");
+			}
+
 		},
-		Extends:Hilo.Container,
-		die: function(){
+		Extends: Hilo.Container,
+		die: function () {
 			var that = this;
-			if(!this.isDie){
+			if (!this.isDie) {
 				this.isDie = true;
 				this.display.goto("die");
 				this.display.interval = 10;
 				this.onUpdate = null;
-				setTimeout(function(){
+				setTimeout(function () {
 					var textures = Hilo.TextureAtlas.createSpriteFrames([
 						["state", "0-5", resource.get("monsterDie"), 38, 40, false, 100]
 					]);
 					that.display.removeFromParent();
 					that.display = new Hilo.Sprite({
-						y:0,
-						x:that.width*.5,
-						pivotX:19,
-						frames:textures,
-						loop:true,
-						timeBased:true
+						y: 0,
+						x: that.width * .5,
+						pivotX: 19,
+						frames: textures,
+						loop: true,
+						timeBased: true
 					});
 					that.addChild(that.display);
 					that.display.play();
-					setTimeout(function(){
+					setTimeout(function () {
 						that.removeFromParent();
 					}, 1000);
 				}, 300);
@@ -160,299 +191,244 @@ KISSY.add("kill/monster", function (S,resource,Event, config) {
 		},
 		onUpdate: function () {
 			var that = this;
+			that.frame++;
 
-			var left = that.x - that.width/2;
-			var top = that.y - that.height/2;
-			var right = that.x + that.width/2;
-			var bottom = that.y + that.height/2;
+			if (that.isboss) {
 
-			var qiang,sniffer = 20;
-			for(var i = 0, len = _game.qiangs.length; i < len; i++){
-				qiang = _game.qiangs[i];
-				if(qiang.hitTestObject(that)){
+				;
+				if (that.vx == 0 && that.vy == 0) {
+					if(that.frame % that.coolingTime == 0){
+						for (var i = 0, len = _game.playerArr.length; i < len; i++) {
+							if (!_game.playerArr[i].isDie) {
+								that.bossPig = _game.playerArr[i];
 
-					that.x += sniffer;
+								that.bossDis = 0;
+								break;
+							}
+						}
 
-					if(!qiang.hitTestObject(that)){
-						that.vx = Math.abs(that.vx);
-						that.scaleX =  -that.scaleX
+						if (len == i) {
+							Event.fire("gameover", {});
+							return;
+						}
+						else{
+							var deltaX = that.bossPig.x - that.x;
+							var deltaY = that.bossPig.y - that.y;
 
-						break;
+							var val = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+							var vx = deltaX / val * 4;
+							var vy = deltaY / val * 4;
+
+							that.vx = vx;
+							that.vy = vy;
+						}
 					}
-					else{
-						that.x -= sniffer;
-					}
+				}
 
 
-					that.x -= sniffer;
-
-					if(!qiang.hitTestObject(that)){
-						that.vx = -Math.abs(that.vx);
-						that.scaleX =  -that.scaleX
-
-						break;
-					}
-					else{
-						that.x += sniffer;
-					}
-
-					that.y += sniffer;
-
-					if(!qiang.hitTestObject(that)){
-						that.vy = Math.abs(that.vy);
-						break;
-					}
-					else{
-						that.y -= sniffer;
-					}
-
-					that.y -= sniffer;
-
-					if(!qiang.hitTestObject(that)){
-						that.vy = -Math.abs(that.vy);
-						break;
-					}
-					else{
-						that.y += sniffer;
-					}
-
+				if (that.bossPig && that.bossPig.hitTestObject(that)) {
 					that.vx = 0;
 					that.vy = 0;
-				}
-			}
 
-
-
-			left = that.x - that.width/2;
-			top = that.y - that.height/2;
-			right = that.x + that.width/2;
-			bottom = that.y + that.height/2;
-
-			var bang;
-			for(var i = 0, len = _game.bangArr.length; i < len; i++){
-
-				bang = _game.bangArr[i];
-
-				if(left < _game.left){
-					bang.vx = -bang.lastVx;
-				}
-
-				if(top < _game.top){
-					that.y = _game.top + that.height/2;
-
-					bang.vy = -bang.lastVy;
-				}
-
-				if(right > _game.right){
-					that.x = _game.right - that.width/2;
-
-					bang.vx = -bang.lastVx;
-				}
-
-				if(bottom > _game.bottom){
-					that.y = _game.bottom - that.height/2;
-
-					bang.vy = -bang.lastVy;
-				}
-
-
-				if(bang.hitTestObject(that)){
-
-					that.x += sniffer;
-
-					if(!bang.hitTestObject(that)){
-						that.vx = Math.abs(that.vx);
-						that.scaleX =  -that.scaleX
-						break;
-					}
-					else{
-						that.x -= sniffer;
-					}
-
-
-					that.x -= sniffer;
-
-					if(!bang.hitTestObject(that)){
-						that.vx = -Math.abs(that.vx);
-						that.scaleX =  -that.scaleX
-						break;
-					}
-					else{
-						that.x += sniffer;
-					}
-
-					that.y += sniffer;
-
-					if(!bang.hitTestObject(that)){
-						that.vy = Math.abs(that.vy);
-						break;
-					}
-					else{
-						that.y -= sniffer;
-					}
-
-					that.y -= sniffer;
-
-					if(!bang.hitTestObject(that)){
-						that.vy = -Math.abs(that.vy);
-						break;
-					}
-					else{
-						that.y += sniffer;
-					}
-
-					that.vx = 0;
-					that.vy = 0;
-				}
-			}
-
-
-			for(var i = 0, len = _game.bangArr.length; i < len; i++){
-				bang = _game.bangArr[i];
-
-				if(!bang.hitTestObject(that)){
-					continue;
-				}
-			}
-
-
-
-			for(var j = 0, len = _game.qiangs.length; j < len; j++){
-				qiang = _game.qiangs[j];
-
-				if(!qiang.hitTestObject(that)){
-					continue;
-				}
-			}
-
-			if(i == len && j == len && that.vx == 0 && that.vy == 0){
-				that.vx = 2 + Math.random();
-				that.vy = 2 + Math.random();
-			}
-
-
-//			for(i = 0,len = _game.bangArr.length; i < len; i++){
-//
-//				bang = _game.bangArr[i];
-//				if(bang.hitTestObject(that)){
-//
-//					var bangLeft = bang.x;
-//					var bangRight = bang.x + bang.width;
-//					var bangTop = bang.y;
-//					var bangBottom = bang.y + bang.height;
-//
-//					//第一，二，三四象限
-//					var A = (top < bangTop && left > bangLeft);
-//					var B = (top >= bangTop && left <= bangLeft);
-//					var C = (bottom > bangBottom && right < bangRight);
-//					var D = (bottom <= bangBottom && right >= bangRight);
-//
-//
-//					if(A){
-//						that.vy = - that.vy;
-//
-//						that.y -=10;
-//
-//						while(bang.hitTestObject(that)){
-//							that.y -=10;
-//						}
-//					}
-//
-//					if(B){
-//						that.vx = - that.vx;
-//
-//						that.x -=10;
-//
-//						while(bang.hitTestObject(that)){
-//							that.x -=10;
-//						}
-//					}
-//
-//					if(C){
-//						that.vy = - that.vy;
-//
-//						that.y +=10;
-//
-//						while(bang.hitTestObject(that)){
-//							that.y +=10;
-//						}
-//					}
-//
-//					if(D){
-//						that.vx = - that.vx;
-//
-//						that.x +=10;
-//
-//						while(bang.hitTestObject(that)){
-//							that.x +=10;
-//						}
-//					}
-//
-//
-//					if(left < _game.left){
-//						that.x = _game.left + that.width/2;
-//						that.vx = 0;
-//						//bang.x = that.x + that.width;
-//
-//						bang.vx = -bang.lastVx;
-//
-//						if(that.lastVy * that.vy < 0){
-//							that.vy = - that.vy;
-//						}
-//					}
-//
-//					if(top < _game.top){
-//						that.y = _game.top + that.height/2;
-//
-//						bang.y = that.y + that.height;
-//						bang.vx = 0;
-//						bang.vy = 0;
-//						that.vy = - that.vy;
-//					}
-//
-//					if(right > _game.right){
-//						that.x = _game.right - that.width/2;
-//
-//						bang.vx = 0;
-//						bang.vy = 0;
-//
-//						bang.x = _game.right - that.width;
-//						that.vx = - that.vx;
-//					}
-//
-//					if(bottom > _game.bottom){
-//						that.y = _game.bottom - that.height/2;
-//
-//						bang.vx = 0;
-//						bang.vy = 0;
-//
-//						bang.y = _game.bottom - that.height;
-//						that.vy = - that.vy;
-//					}
-//
-//					break;
-//				}
-//			}
-
-			_game.playerArr.forEach(function(player){
-				if(player.hitTestObject(that)){
-					Event.fire("playerDied",{
-						player:player
+					Event.fire("playerDied", {
+						player: that.bossPig
 					});
 				}
-			});
+				else {
+					that.x += that.vx;
+					that.y += that.vy;
+
+					that.bossDis += Math.sqrt(that.vx * that.vx + that.vy * that.vy);
+				}
+
+			}
+			else {
+				var left = that.x - that.width / 2;
+				var top = that.y - that.height / 2;
+				var right = that.x + that.width / 2;
+				var bottom = that.y + that.height / 2;
+
+				var qiang, sniffer = 20;
+				for (var i = 0, len = _game.qiangs.length; i < len; i++) {
+					qiang = _game.qiangs[i];
+					if (qiang.hitTestObject(that)) {
+
+						that.x += sniffer;
+
+						if (!qiang.hitTestObject(that)) {
+							that.vx = Math.abs(that.vx);
+							that.scaleX = -that.scaleX
+
+							break;
+						}
+						else {
+							that.x -= sniffer;
+						}
 
 
-			this.x += this.vx;
-			this.y += this.vy;
+						that.x -= sniffer;
 
-			that.lastVx = that.vx;
-			that.lastVy = that.vy;
+						if (!qiang.hitTestObject(that)) {
+							that.vx = -Math.abs(that.vx);
+							that.scaleX = -that.scaleX
+
+							break;
+						}
+						else {
+							that.x += sniffer;
+						}
+
+						that.y += sniffer;
+
+						if (!qiang.hitTestObject(that)) {
+							that.vy = Math.abs(that.vy);
+							break;
+						}
+						else {
+							that.y -= sniffer;
+						}
+
+						that.y -= sniffer;
+
+						if (!qiang.hitTestObject(that)) {
+							that.vy = -Math.abs(that.vy);
+							break;
+						}
+						else {
+							that.y += sniffer;
+						}
+
+						that.vx = 0;
+						that.vy = 0;
+					}
+				}
+
+
+				left = that.x - that.width / 2;
+				top = that.y - that.height / 2;
+				right = that.x + that.width / 2;
+				bottom = that.y + that.height / 2;
+
+				var bang;
+				for (var i = 0, len = _game.bangArr.length; i < len; i++) {
+
+					bang = _game.bangArr[i];
+
+					if (left < _game.left) {
+						bang.vx = -bang.lastVx;
+					}
+
+					if (top < _game.top) {
+						that.y = _game.top + that.height / 2;
+
+						bang.vy = -bang.lastVy;
+					}
+
+					if (right > _game.right) {
+						that.x = _game.right - that.width / 2;
+
+						bang.vx = -bang.lastVx;
+					}
+
+					if (bottom > _game.bottom) {
+						that.y = _game.bottom - that.height / 2;
+
+						bang.vy = -bang.lastVy;
+					}
+
+
+					if (bang.hitTestObject(that)) {
+
+						that.x += sniffer;
+
+						if (!bang.hitTestObject(that)) {
+							that.vx = Math.abs(that.vx);
+							that.scaleX = -that.scaleX
+							break;
+						}
+						else {
+							that.x -= sniffer;
+						}
+
+
+						that.x -= sniffer;
+
+						if (!bang.hitTestObject(that)) {
+							that.vx = -Math.abs(that.vx);
+							that.scaleX = -that.scaleX
+							break;
+						}
+						else {
+							that.x += sniffer;
+						}
+
+						that.y += sniffer;
+
+						if (!bang.hitTestObject(that)) {
+							that.vy = Math.abs(that.vy);
+							break;
+						}
+						else {
+							that.y -= sniffer;
+						}
+
+						that.y -= sniffer;
+
+						if (!bang.hitTestObject(that)) {
+							that.vy = -Math.abs(that.vy);
+							break;
+						}
+						else {
+							that.y += sniffer;
+						}
+
+						that.vx = 0;
+						that.vy = 0;
+					}
+				}
+
+
+				for (var i = 0, len = _game.bangArr.length; i < len; i++) {
+					bang = _game.bangArr[i];
+
+					if (!bang.hitTestObject(that)) {
+						continue;
+					}
+				}
+				for (var j = 0, len = _game.qiangs.length; j < len; j++) {
+					qiang = _game.qiangs[j];
+
+					if (!qiang.hitTestObject(that)) {
+						continue;
+					}
+				}
+
+				if (i == len && j == len && that.vx == 0 && that.vy == 0) {
+					that.vx = 2 + Math.random();
+					that.vy = 2 + Math.random();
+				}
+
+				_game.playerArr.forEach(function (player) {
+					if (player.hitTestObject(that)) {
+						Event.fire("playerDied", {
+							player: player
+						});
+					}
+				});
+
+
+				this.x += this.vx;
+				this.y += this.vy;
+
+				that.lastVx = that.vx;
+				that.lastVy = that.vy;
+			}
 		}
 	});
 
 	return Monster;
 
-},{
-	requires:["kill/resource","kill/mediator","kill/config"]
+}, {
+	requires: ["kill/resource", "kill/mediator", "kill/config"]
 });

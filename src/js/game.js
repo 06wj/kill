@@ -118,7 +118,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 	        monsterArr.push(m2);
 
 	        var m3 = new Monster({
-		        x: 500, y: 300
+		        x: 500, y: 300, type: "boss"
 	        });
 	        this.stage.addChild(m3);
 	        monsterArr.push(m3);

@@ -13,12 +13,12 @@ KISSY.add("kill/states", function(){
                     rotation:90,
                     length:300
                 },{
-                    x:200,
+                    x:300,
                     y:400,
                     length:200,
                     rotation:0
                 },{
-                    x:200,
+                    x:600,
                     y:70,
                     rotation:90,
                     length:300

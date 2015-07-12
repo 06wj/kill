@@ -196,7 +196,9 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
     })
 
     mediator.on("playerDied", function(d){
-        d.player.die()
+        if(!config.god){
+            d.player.die();
+        }
     });
     return Player;
 },{

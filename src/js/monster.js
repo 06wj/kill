@@ -2,7 +2,7 @@
  * Created by admin on 15/7/10.
  */
 
-KISSY.add("kill/monster", function (S,resource) {
+KISSY.add("kill/monster", function (S,resource,Event) {
 
 	var Manager = {
 		pepole: {
@@ -143,6 +143,7 @@ KISSY.add("kill/monster", function (S,resource) {
 			this.display.play("monster1");
 		},
 		Extends:Hilo.Container,
+		die: function(){},
 		onUpdate: function () {
 			var that = this;
 
@@ -162,137 +163,70 @@ KISSY.add("kill/monster", function (S,resource) {
 					var bangTop = bang.y;
 					var bangBottom = bang.y + bang.height;
 
-					var A = (right < bangLeft && bottom < bangTop);
-					var B = ( left > bangRight && bottom < bangTop);
-					var C = (left > bangRight && top > bangBottom);
-					var D = (right < bangLeft && top > bangBottom);
+					//第一，二，三四象限
+					var A = (that.vx > 0 && that.vy < 0);
+					var B = (that.vx > 0 && that.vy > 0);
+					var C = (that.vx < 0 && that.vy > 0);
+					var D = (that.vx < 0 && that.vy < 0);
 
-					if(!A && !B && !C && !D){
-						if(left < bangLeft){
-							that.x = bangLeft - that.width/2;
-							that.vx = -that.vx;
-							that.scaleX = -that.scaleX;
-						}
+					if(A){
+						that.x += 30;
+						that.y -= 30;
 
-						if(top < bangTop){
-							that.y = bangTop - that.height/2;
-							that.vy = -that.vy;
-						}
-
-						if(right > bangRight){
-							that.y = bangRight + that.width/2;
-							that.vx = -that.vx;
-							that.scaleX = -that.scaleX;
-						}
-
-						if(bottom > bangBottom){
-							that.y = bangBottom + that.height/2;
-							that.vy = -that.vy;
-						}
-					}
-					else{
-
-						if(A){
-							that.x = bangLeft - that.width/2;
-							that.y = bangTop - that.height/2;
-						}
-
-						if(B){
-							that.x = bangRight + that.width/2;
-							that.y = bangTop - that.height/2;
-						}
-
-						if(C){
-							that.y = bangBottom + that.height/2;
-							that.x = bangRight + that.width/2;
-						}
-
-						if(D){
-							that.x = bangLeft - that.width/2;
-							that.y = bangBottom + that.height/2;
-						}
-
-						that.vx = -that.vx;
-						that.vy = -that.vy;
-
-						that.scaleX = -that.scaleX;
+//						console.log("A",right - bangLeft,top - bangBottom);
 					}
 
-					if(left < _game.left){
-						this.x = _game.left + this.width/2;
-						that.vx = - that.vx;
+					if(B){
+						that.x += 30;
+						that.y += 30;
 
-						if(b != null){
-							b.x = _game.left + this.width + b.width/2;
-						}
+//						console.log("B",right - bangLeft,bottom - bangTop);
 					}
 
-					if(top < _game.top){
-						this.y = _game.top + this.height/2;
-						that.vy = - that.vy;
+					if(C){
+						that.x -= 30;
+						that.y += 30;
 
-						if(b != null){
-							b.y = _game.top + this.height + b.height/2;
-						}
+//						console.log("C");
 					}
 
-					if(right > _game.right){
-						this.x = _game.right - this.width/2;
-						that.vx = - that.vx;
+					if(D){
+						that.x -= 30;
+						that.y -= 30;
 
-						if(b != null){
-							b.x = _game.right - this.width - b.width/2;
-						}
+//						console.log("D");
 					}
 
-					if(bottom > _game.bottom){
-						this.y = _game.bottom - this.height/2;
-						that.vy = - that.vy;
-
-						if(b != null){
-							b.y = _game.bottom - this.height - b.height/2;
-						}
-					}
+					that.vy = - that.vy;
 				}
+			});
 
+			_game.playerArr.forEach(function(player){
 
+				if(player.hitTestObject(that)){
+					Event.fire("dead",player);
+				}
 			});
 
 
 			if(left < _game.left){
 				this.x = _game.left + this.width/2;
 				that.vx = - that.vx;
-
-				if(b != null){
-					b.x = _game.left + this.width + b.width/2;
-				}
 			}
 
 			if(top < _game.top){
 				this.y = _game.top + this.height/2;
 				that.vy = - that.vy;
-
-				if(b != null){
-					b.y = _game.top + this.height + b.height/2;
-				}
 			}
 
 			if(right > _game.right){
 				this.x = _game.right - this.width/2;
 				that.vx = - that.vx;
-
-				if(b != null){
-					b.x = _game.right - this.width - b.width/2;
-				}
 			}
 
 			if(bottom > _game.bottom){
 				this.y = _game.bottom - this.height/2;
 				that.vy = - that.vy;
-
-				if(b != null){
-					b.y = _game.bottom - this.height - b.height/2;
-				}
 			}
 
 
@@ -305,5 +239,5 @@ KISSY.add("kill/monster", function (S,resource) {
 	return Monster;
 
 },{
-	requires:["kill/resource"]
+	requires:["kill/resource","kill/mediator"]
 });

@@ -203,22 +203,40 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 						that.vy = - that.vy;
 
 						that.y -=10;
+
+						while(bang.hitTestObject(that)){
+							that.y -=10;
+						}
 					}
 
 					if(B){
 						that.vx = - that.vx;
 
 						that.x -=10;
+
+						while(bang.hitTestObject(that)){
+							that.x -=10;
+						}
 					}
 
 					if(C){
 						that.vy = - that.vy;
 
 						that.y +=10;
+
+						while(bang.hitTestObject(that)){
+							that.y +=10;
+						}
 					}
 
 					if(D){
 						that.vx = - that.vx;
+
+						that.x +=10;
+
+						while(bang.hitTestObject(that)){
+							that.x +=10;
+						}
 					}
 
 					break;

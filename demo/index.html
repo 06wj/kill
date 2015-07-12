@@ -11,6 +11,19 @@
         }
 
         #game{
+
+        }
+
+        #startBg{
+            position: absolute;
+            left: 0px;
+            top:0px;
+            width: 1000px;
+            height: 600px;
+            background: url(../src/img/startBg.png);
+        }
+
+        .container{
             position: absolute;
             top:50%;
             left:50%;
@@ -23,7 +36,10 @@
     </style>
 </head>
 <body>
-    <div id="game"></div>
+    <div class="container">
+        <div id="startBg"></div>
+        <div id="game"></div>
+    </div>
     <!-- <script src="http://g.alicdn.com/kissy/k/1.4.7/seed-min.js"></script> -->
     <script src="../../kissy/seed-min.js"></script>
     <script src="../src/lib/hilo.js"></script>
@@ -42,7 +58,13 @@
         }
     });
     KISSY.use("kill/game", function(S, game){
-        game.init(document.getElementById("game"));
+        var isInit = false;
+        document.body.onclick = function(){
+            if(!isInit){
+                isInit = true;
+                game.init(document.getElementById("game"));
+            }
+        }
     });
     </script>
 </body>

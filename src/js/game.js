@@ -22,7 +22,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
         _bindEvent:function(){
             var that = this;
             mediator.on("gameLoadComplete", function(){
-                that._initGame();
+                that._initGame(config.state);
             });
 
             mediator.on("playerGameOver", function(d){
@@ -72,9 +72,6 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             var playerArr = this.playerArr;
             var monsterArr = this.monsterArr;
 
-
-
-
             var state = states.getState(stateIndex);
             if(!state){
                 alert("棒！已通关！");
@@ -82,7 +79,6 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 that._initGame(0);
                 return;
             }
-
 
             state.bangs.forEach(function(bangCfg){
                 var bang = new Bang(bangCfg);

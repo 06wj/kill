@@ -145,15 +145,13 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     x:0,
                     y:0,
                     width:1000,
-                    height:game.top + 10,
-                    // background:"rgba(255, 0, 0, .3)"
+                    height:game.top + 10
                 }),
                 new View({
                     x:0,
                     y:game.bottom - 10,
                     width:1000,
-                    height:800-game.bottom + 10,
-                    // background:"rgba(255, 0, 0, .3)"
+                    height:800-game.bottom + 10
                 })
             ];
 
@@ -164,15 +162,13 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                     x:0,
                     y:0,
                     width:game.left + 10,
-                    height:800,
-                    // background:"rgba(255, 0, 0, .05)"
+                    height:800
                 }),
                 new View({
                     x:game.right - 10,
                     y:0,
                     width:1000-game.right + 10,
-                    height:800,
-                    // background:"rgba(255, 0, 0, .05)"
+                    height:800
                 })
             ];
 
@@ -180,6 +176,10 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             stage.addChild(this.hengRects[3]);
             stage.addChild(this.shuRects[2]);
             stage.addChild(this.shuRects[3]);
+
+            if(config.showHit){
+                this.hengRects[2].background = this.hengRects[3].background = this.shuRects[2].background = this.shuRects[3].background = "rgba(255, 0, 0, .3)";
+            }
         },
         checkCollision:function(){
             var that = this;

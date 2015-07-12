@@ -1,4 +1,4 @@
-KISSY.add("kill/player", function(S, resource, input, mediator){
+KISSY.add("kill/player", function(S, resource, input, mediator, config){
     var Class = Hilo.Class;
     var Container = Hilo.Container;
     var Sprite = Hilo.Sprite;
@@ -9,6 +9,10 @@ KISSY.add("kill/player", function(S, resource, input, mediator){
         Extends:Container,
         constructor:function(properties){
             Player.superclass.constructor.call(this, properties);
+            if(config.showHit){
+                this.background = "rgba(255,0,0,.3)";
+            }
+
             this.playerNum = properties.playerNum;
             this.width = this.height = 44;
             this.pivotX = 22;
@@ -20,6 +24,8 @@ KISSY.add("kill/player", function(S, resource, input, mediator){
                 ["win", "5,6", img, 51, 49, true, 300]
             ]);
             this.display = new Sprite({
+                x:-5,
+                y:-5,
                 frames:textures,
                 loop:true,
                 timeBased:true
@@ -29,8 +35,8 @@ KISSY.add("kill/player", function(S, resource, input, mediator){
 
             this.bangArr = _game.bangArr;
 
-            this.width = 51;
-            this.height = 49;
+            this.width = 41;
+            this.height = 39;
             this.halfWidth = this.width * .5;
             this.halfHeight = this.height * .5;
         },
@@ -194,5 +200,5 @@ KISSY.add("kill/player", function(S, resource, input, mediator){
     });
     return Player;
 },{
-    requires:["kill/resource", "kill/input", "kill/mediator"]
+    requires:["kill/resource", "kill/input", "kill/mediator", "kill/config"]
 });

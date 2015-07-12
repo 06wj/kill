@@ -2,7 +2,7 @@
  * Created by admin on 15/7/10.
  */
 
-KISSY.add("kill/monster", function (S,resource,Event) {
+KISSY.add("kill/monster", function (S,resource,Event, config) {
 
 	var Manager = {
 		pepole: {
@@ -120,7 +120,9 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 				maxY: this.y + this.r
 			}
 
-			this.background = "rgba(0,255,0,.4)"
+			if(config.showHit){
+				this.background = "rgba(0,255,0,.4)";
+			}
 
 			var textures = Hilo.TextureAtlas.createSpriteFrames([
 				["state", "0-1", resource.get("monster1"), 54, 64, true, 300],
@@ -283,5 +285,5 @@ KISSY.add("kill/monster", function (S,resource,Event) {
 	return Monster;
 
 },{
-	requires:["kill/resource","kill/mediator"]
+	requires:["kill/resource","kill/mediator","kill/config"]
 });

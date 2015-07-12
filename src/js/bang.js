@@ -1,4 +1,4 @@
-KISSY.add("kill/bang", function(S, resource){
+KISSY.add("kill/bang", function(S, resource, config){
     var Class = Hilo.Class;
     var Sprite = Hilo.Sprite;
     var Container = Hilo.Container;
@@ -11,18 +11,50 @@ KISSY.add("kill/bang", function(S, resource){
         constructor:function(properties){
             Bang.superclass.constructor.call(this, properties);
 
-            var width = properties.length;
+            var len = properties.length;
             this.rotation = 0;
             var rotation = properties.rotation;
+            if(rotation === 90){
+                this._initShu(len)
+            }
+            else{
+                this._initHeng(len);
+            }
 
-            this.width = rotation == 90?20:width + 34;
-            this.height = rotation == 0?20:width + 34;
-            this.background = "rgba(0,255,120,.1)";
+
+        },
+        onUpdate:function(){
+            this.x += this.vx;
+            this.y += this.vy;
+
+            this.lastVx = this.vx;
+            this.lastVy = this.vy;
+            this.vx = this.vy = 0;
+
+            if(this.x + this.width > _game.right){
+                this.x = _game.right - this.width;
+            }
+            else if(this.x < _game.left){
+                this.x = _game.left;
+            }
+
+            if(this.y + this.height > _game.bottom){
+                this.y = _game.bottom - this.height;
+            }
+            else if(this.y < _game.top){
+                this.y = _game.top;
+            }
+        },
+        _initHeng:function(len){
+            this.width = len + 34;
+            this.height = 20;
+            if(config.showHit){
+                this.background = "rgba(255,0,0,.3)";
+            }
             this.vx = this.vy = 0;
             this.display = new Container({
-                x:rotation == 90?43:0,
-                y:rotation == 0?-25:0,
-                rotation:rotation
+                x:0,
+                y:-25
             });
             this.topContainer = new Container();
             this.bottomContainer = new Container();
@@ -34,15 +66,15 @@ KISSY.add("kill/bang", function(S, resource){
             var middle = new Bitmap({
                 x:17,
                 y:20,
-                scaleX:width*.1,
-                image:resource.get("stick_middle")
+                scaleX:len*.1,
+                image:resource.get("hmiddle")
             });
             this.topContainer.addChild(middle);
 
             var light = new Bitmap({
                 x:20,
                 y:18,
-                image:resource.get("stick_light")
+                image:resource.get("hlight")
             });
             this.topContainer.addChild(light);
 
@@ -50,7 +82,7 @@ KISSY.add("kill/bang", function(S, resource){
             var loopTween = function(){
                 light.y = 18;
                 Tween.to(light, {
-                    x:width
+                    x:len
                 },{
                     duration:1000,
                     delay:delay,
@@ -81,57 +113,121 @@ KISSY.add("kill/bang", function(S, resource){
             var shadow = new Bitmap({
                 x:9,
                 y:52,
-                image:resource.get("stick_shadow"),
+                image:resource.get("hshadow"),
                 pivotX:6.5
             });
             this.bottomContainer.addChild(shadow);
 
             var shadow = new Bitmap({
-                x:25 + width,
+                x:25 + len,
                 y:52,
                 scaleX:-1,
                 pivotX:6.5,
-                image:resource.get("stick_shadow")
+                image:resource.get("hshadow")
             });
             this.bottomContainer.addChild(shadow);
 
             var start = new Bitmap({
                 x:0,
-                image:resource.get("stick_start")
+                image:resource.get("hstart")
             });
             this.topContainer.addChild(start);
 
             var start = new Bitmap({
-                x:width + 34,
+                x:len + 34,
                 scaleX:-1,
-                image:resource.get("stick_start")
+                image:resource.get("hstart")
             });
             this.topContainer.addChild(start);
         },
-        onUpdate:function(){
-            this.x += this.vx;
-            this.y += this.vy;
-
-            this.lastVx = this.vx;
-            this.lastVy = this.vy;
+        _initShu:function(len){
+            this.width = 15;
+            this.height = len + 34;
+            if(config.showHit){
+                this.background = "rgba(255,0,0,.3)";
+            }
             this.vx = this.vy = 0;
+            this.display = new Container({
+                x:0,
+                y:0
+            });
+            this.topContainer = new Container();
+            this.bottomContainer = new Container();
 
-            if(this.x + this.width > _game.right){
-                this.x = _game.right - this.width;
-            }
-            else if(this.x < _game.left){
-                this.x = _game.left;
-            }
+            this.addChild(this.display);
+            this.display.addChild(this.bottomContainer);
+            this.display.addChild(this.topContainer);
 
-            if(this.y + this.height > _game.bottom){
-                this.y = _game.bottom - this.height;
-            }
-            else if(this.y < _game.top){
-                this.y = _game.top;
-            }
+            var middle = new Bitmap({
+                x:5,
+                y:20,
+                scaleY:len*.1,
+                image:resource.get("smiddle")
+            });
+            this.topContainer.addChild(middle);
+
+            var light = new Bitmap({
+                x:3,
+                y:33,
+                image:resource.get("slight")
+            });
+            this.topContainer.addChild(light);
+
+            var delay = Math.random() * 1000;
+            var loopTween = function(){
+                light.y = 18;
+                Tween.to(light, {
+                    y:len
+                },{
+                    duration:1000,
+                    delay:delay,
+                    loop:true,
+                    reverse:true
+                });
+            };
+            loopTween();
+
+            Tween.to(this.topContainer, {
+                y:5
+            },{
+                duration:1000,
+                loop:true,
+                reverse:true,
+                delay:delay
+            });
+
+            var shadow = new Bitmap({
+                x:9,
+                y:52,
+                image:resource.get("sshadow"),
+                pivotX:6.5
+            });
+            this.bottomContainer.addChild(shadow);
+
+            var shadow = new Bitmap({
+                x:9,
+                y:38 + len,
+                scaleX:-1,
+                pivotX:6.5,
+                image:resource.get("sshadow")
+            });
+            this.bottomContainer.addChild(shadow);
+
+            var start = new Bitmap({
+                x:0,
+                image:resource.get("sstartFront")
+            });
+            this.topContainer.addChild(start);
+
+            var start = new Bitmap({
+                x:0,
+                y:len - 15,
+                image:resource.get("sstartBack")
+            });
+            this.topContainer.addChild(start);
         }
     });
     return Bang;
 },{
-    requires:["kill/resource"]
+    requires:["kill/resource", "kill/config"]
 });

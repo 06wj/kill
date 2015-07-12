@@ -107,7 +107,8 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 				["state", "0-1", resource.get("monster1"), 54, 64, true, 300],
 				["boss1", "0", resource.get("boss1"), 74, 72, true, 300],
 				["walk", "2-5", resource.get("monster1"), 54, 64, true, 300],
-				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 100]
+				["die", "6,1,6,1", resource.get("monster1"), 54, 64, true, 100],
+				["bosswalk", "0-3", resource.get("bosswalk"), 85, 85, true, 100]
 			]);
 
 			var dims = {
@@ -147,7 +148,7 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 				this.lastVx = this.vx = 0;
 				this.lastVy = this.vy = 0;
 
-				this.display.goto("boss1");
+				this.display.goto("bosswalk");
 			}
 			else {
 
@@ -159,7 +160,6 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 					this.lastVx = this.vx = 2 + Math.random();
 					this.lastVy = this.vy = 2 + Math.random();
 				}
-
 
 				this.display.goto("walk");
 			}
@@ -218,6 +218,7 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 
 
 				if (that.bossPig && that.bossPig.hitTestObject(that)) {
+
 					that.vx = 0;
 					that.vy = 0;
 

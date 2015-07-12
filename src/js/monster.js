@@ -147,14 +147,19 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 				this.lastVx = this.vx = 0;
 				this.lastVy = this.vy = 0;
 
-				this.bossDis = 0;
-				this.coolingTime = 100;
-
 				this.display.goto("boss1");
 			}
 			else {
-				this.lastVx = this.vx = 2 + Math.random();
-				this.lastVy = this.vy = 2 + Math.random();
+
+				if(properties.isMove !== undefined && !properties.isMove){
+					this.lastVx = this.vx = 0;
+					this.lastVy = this.vy = 0;
+				}
+				else{
+					this.lastVx = this.vx = 2 + Math.random();
+					this.lastVy = this.vy = 2 + Math.random();
+				}
+
 
 				this.display.goto("walk");
 			}

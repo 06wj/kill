@@ -1,0 +1,1 @@
+KISSY.add("kill/mediator",function(e,r){var t=e.merge({},r.Target);return t},{requires:["event"]});

@@ -1,0 +1,1 @@
+KISSY.add("kill/input",function(){var n={87:"up0",83:"down0",65:"left0",68:"right0",70:"hold0",38:"up1",40:"down1",37:"left1",39:"right1",191:"hold1"},t=window._input={init:function(){var t=this;document.body.addEventListener("keydown",function(d){t[n[d.keyCode]]=!0}),document.body.addEventListener("keyup",function(d){t[n[d.keyCode]]=!1})}};return t});

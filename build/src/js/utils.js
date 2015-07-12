@@ -1,0 +1,1 @@
+KISSY.add("kill/utils",function(r){var n={getUrlKey:function(n){return n?r.unparam(location.search.substring(1))[n]:r.unparam(location.search.substring(1))}};return n},{requires:[]});

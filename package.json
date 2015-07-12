@@ -1,0 +1,28 @@
+{
+  "name": "kill",
+  "description": "kill game",
+  "version": "0.0.1",
+  "author": [
+    {
+      "name": "06wj",
+      "email": "06wj@163.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:06wj/kill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/06wj/kill/issues"
+  },
+  "main": "gulpfiles.js",
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "~3.8.7",
+    "gulp-concat": "~2.3.4",
+    "gulp-imagemin": "^2.3.0",
+    "gulp-pngmin": "^0.1.4",
+    "gulp-uglify": "~0.3.1",
+    "merge-stream": "^0.1.8"
+  }
+}

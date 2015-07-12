@@ -209,7 +209,7 @@ KISSY.add("kill/states", function(){
                 }
             ]
         },
-        //----------------------- stage 5 ----------------------------
+        // ----------------------- stage 5 ----------------------------
        {
             bangs:[{
                     x:400,
@@ -238,11 +238,23 @@ KISSY.add("kill/states", function(){
                     y: 100,
                     type:"trap"
                 },{
-                    x: 900,
+                    x: 150,
+                    y: 100,
+                    type:"trap"
+                },{
+                    x: 250,
+                    y: 100,
+                    type:"trap"
+                },{
+                    x: 350,
                     y: 100,
                     type:"trap"
                 },{
                     x: 500,
+                    y: 100,
+                    type:"trap"
+                },{
+                    x: 800,
                     y: 50,
                     type:"boss"
                 }

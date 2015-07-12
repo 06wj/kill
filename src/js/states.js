@@ -190,10 +190,6 @@ KISSY.add("kill/states", function(){
                     type:"normal"
                 },{
                     x: 900,
-                    y: 100,
-                    type:"normal"
-                },{
-                    x: 900,
                     y: 500,
                     type:"normal"
                 },{

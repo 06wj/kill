@@ -134,7 +134,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
                 that.endBg.onclick = null;
                 that.endBg.style.display = "none";
                 that.reset();
-                that._initGame(0);
+                that._initGame(type==="gameover"?states.index:0);
             }
         },
         checkCollision:function(){

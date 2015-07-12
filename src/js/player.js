@@ -34,6 +34,23 @@ KISSY.add("kill/player", function(S, resource, input){
             this.halfWidth = this.width * .5;
             this.halfHeight = this.height * .5;
         },
+        die:function(){
+            if(!this.isDie){
+                this.isDie = true;
+                this.onUpdate = null;
+                this.display.removeFromParent();
+                var textures = Hilo.TextureAtlas.createSpriteFrames([
+                    ["die", "0-7", resource.get("playerDie" + (this.playerNum + 1)), 79, 49, false, 200]
+                ]);
+                this.display = new Sprite({
+                    frames:textures,
+                    loop:true,
+                    timeBased:true
+                });
+                this.addChild(this.display);
+                this.display.play();
+            }
+        },
         getInput:function(data){
             return input[data + this.playerNum];
         },

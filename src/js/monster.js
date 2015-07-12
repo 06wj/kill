@@ -155,10 +155,14 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 				if(properties.isMove !== undefined && !properties.isMove){
 					this.lastVx = this.vx = 0;
 					this.lastVy = this.vy = 0;
+
+					this.isMove = false;
 				}
 				else{
 					this.lastVx = this.vx = 2 + Math.random();
 					this.lastVy = this.vy = 2 + Math.random();
+
+					this.isMove = true;
 				}
 
 				this.display.goto("walk");
@@ -247,6 +251,9 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 
 			}
 			else {
+
+				if(!that.isMove) return;
+
 				var left = that.x - that.width / 2;
 				var top = that.y - that.height / 2;
 				var right = that.x + that.width / 2;

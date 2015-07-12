@@ -252,187 +252,278 @@ KISSY.add("kill/monster", function (S, resource, Event, config) {
 			}
 			else {
 
-				if(!that.isMove) return;
+				if(!that.isMove) {
+					var bang,sniffer = 20;
+					var left = that.x - that.width / 2;
+					var top = that.y - that.height / 2;
+					var right = that.x + that.width / 2;
+					var bottom = that.y + that.height / 2;
 
-				var left = that.x - that.width / 2;
-				var top = that.y - that.height / 2;
-				var right = that.x + that.width / 2;
-				var bottom = that.y + that.height / 2;
 
-				var qiang, sniffer = 20;
-				for (var i = 0, len = _game.qiangs.length; i < len; i++) {
-					qiang = _game.qiangs[i];
-					if (qiang.hitTestObject(that)) {
+					for (var i = 0, len = _game.bangArr.length; i < len; i++) {
 
-						that.x += sniffer;
+						bang = _game.bangArr[i];
 
-						if (!qiang.hitTestObject(that)) {
-							that.vx = Math.abs(that.vx);
-							that.scaleX = -that.scaleX
-
-							break;
-						}
-						else {
-							that.x -= sniffer;
+						if (left < _game.left) {
+							bang.vx = -bang.lastVx;
 						}
 
+						if (top < _game.top) {
+							that.y = _game.top + that.height / 2;
 
-						that.x -= sniffer;
-
-						if (!qiang.hitTestObject(that)) {
-							that.vx = -Math.abs(that.vx);
-							that.scaleX = -that.scaleX
-
-							break;
+							bang.vy = -bang.lastVy;
 						}
-						else {
+
+						if (right > _game.right) {
+							that.x = _game.right - that.width / 2;
+
+							bang.vx = -bang.lastVx;
+						}
+
+						if (bottom > _game.bottom) {
+							that.y = _game.bottom - that.height / 2;
+
+							bang.vy = -bang.lastVy;
+						}
+
+
+						if (bang.hitTestObject(that)) {
+
 							that.x += sniffer;
-						}
 
-						that.y += sniffer;
-
-						if (!qiang.hitTestObject(that)) {
-							that.vy = Math.abs(that.vy);
-							break;
-						}
-						else {
-							that.y -= sniffer;
-						}
-
-						that.y -= sniffer;
-
-						if (!qiang.hitTestObject(that)) {
-							that.vy = -Math.abs(that.vy);
-							break;
-						}
-						else {
-							that.y += sniffer;
-						}
-
-						that.vx = 0;
-						that.vy = 0;
-					}
-				}
+							if (!bang.hitTestObject(that)) {
+								that.vx = Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+								break;
+							}
+							else {
+								that.x -= sniffer;
+							}
 
 
-				left = that.x - that.width / 2;
-				top = that.y - that.height / 2;
-				right = that.x + that.width / 2;
-				bottom = that.y + that.height / 2;
-
-				var bang;
-				for (var i = 0, len = _game.bangArr.length; i < len; i++) {
-
-					bang = _game.bangArr[i];
-
-					if (left < _game.left) {
-						bang.vx = -bang.lastVx;
-					}
-
-					if (top < _game.top) {
-						that.y = _game.top + that.height / 2;
-
-						bang.vy = -bang.lastVy;
-					}
-
-					if (right > _game.right) {
-						that.x = _game.right - that.width / 2;
-
-						bang.vx = -bang.lastVx;
-					}
-
-					if (bottom > _game.bottom) {
-						that.y = _game.bottom - that.height / 2;
-
-						bang.vy = -bang.lastVy;
-					}
-
-
-					if (bang.hitTestObject(that)) {
-
-						that.x += sniffer;
-
-						if (!bang.hitTestObject(that)) {
-							that.vx = Math.abs(that.vx);
-							that.scaleX = -that.scaleX
-							break;
-						}
-						else {
 							that.x -= sniffer;
-						}
 
+							if (!bang.hitTestObject(that)) {
+								that.vx = -Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+								break;
+							}
+							else {
+								that.x += sniffer;
+							}
 
-						that.x -= sniffer;
-
-						if (!bang.hitTestObject(that)) {
-							that.vx = -Math.abs(that.vx);
-							that.scaleX = -that.scaleX
-							break;
-						}
-						else {
-							that.x += sniffer;
-						}
-
-						that.y += sniffer;
-
-						if (!bang.hitTestObject(that)) {
-							that.vy = Math.abs(that.vy);
-							break;
-						}
-						else {
-							that.y -= sniffer;
-						}
-
-						that.y -= sniffer;
-
-						if (!bang.hitTestObject(that)) {
-							that.vy = -Math.abs(that.vy);
-							break;
-						}
-						else {
 							that.y += sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vy = Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y -= sniffer;
+							}
+
+							that.y -= sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vy = -Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y += sniffer;
+							}
+
+							that.vx = 0;
+							that.vy = 0;
+						}
+					}
+
+					_game.playerArr.forEach(function (player) {
+						if (player.hitTestObject(that)) {
+							Event.fire("playerDied", {
+								player: player
+							});
+						}
+					});
+
+				}
+				else{
+					var left = that.x - that.width / 2;
+					var top = that.y - that.height / 2;
+					var right = that.x + that.width / 2;
+					var bottom = that.y + that.height / 2;
+
+					var qiang, sniffer = 20;
+					for (var i = 0, len = _game.qiangs.length; i < len; i++) {
+						qiang = _game.qiangs[i];
+						if (qiang.hitTestObject(that)) {
+
+							that.x += sniffer;
+
+							if (!qiang.hitTestObject(that)) {
+								that.vx = Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+
+								break;
+							}
+							else {
+								that.x -= sniffer;
+							}
+
+
+							that.x -= sniffer;
+
+							if (!qiang.hitTestObject(that)) {
+								that.vx = -Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+
+								break;
+							}
+							else {
+								that.x += sniffer;
+							}
+
+							that.y += sniffer;
+
+							if (!qiang.hitTestObject(that)) {
+								that.vy = Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y -= sniffer;
+							}
+
+							that.y -= sniffer;
+
+							if (!qiang.hitTestObject(that)) {
+								that.vy = -Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y += sniffer;
+							}
+
+							that.vx = 0;
+							that.vy = 0;
+						}
+					}
+
+					left = that.x - that.width / 2;
+					top = that.y - that.height / 2;
+					right = that.x + that.width / 2;
+					bottom = that.y + that.height / 2;
+
+					var bang;
+					for (var i = 0, len = _game.bangArr.length; i < len; i++) {
+
+						bang = _game.bangArr[i];
+
+						if (left < _game.left) {
+							bang.vx = -bang.lastVx;
 						}
 
-						that.vx = 0;
-						that.vy = 0;
+						if (top < _game.top) {
+							that.y = _game.top + that.height / 2;
+
+							bang.vy = -bang.lastVy;
+						}
+
+						if (right > _game.right) {
+							that.x = _game.right - that.width / 2;
+
+							bang.vx = -bang.lastVx;
+						}
+
+						if (bottom > _game.bottom) {
+							that.y = _game.bottom - that.height / 2;
+
+							bang.vy = -bang.lastVy;
+						}
+
+
+						if (bang.hitTestObject(that)) {
+
+							that.x += sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vx = Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+								break;
+							}
+							else {
+								that.x -= sniffer;
+							}
+
+
+							that.x -= sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vx = -Math.abs(that.vx);
+								that.scaleX = -that.scaleX
+								break;
+							}
+							else {
+								that.x += sniffer;
+							}
+
+							that.y += sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vy = Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y -= sniffer;
+							}
+
+							that.y -= sniffer;
+
+							if (!bang.hitTestObject(that)) {
+								that.vy = -Math.abs(that.vy);
+								break;
+							}
+							else {
+								that.y += sniffer;
+							}
+
+							that.vx = 0;
+							that.vy = 0;
+						}
 					}
-				}
 
+					for (var i = 0, len = _game.bangArr.length; i < len; i++) {
+						bang = _game.bangArr[i];
 
-				for (var i = 0, len = _game.bangArr.length; i < len; i++) {
-					bang = _game.bangArr[i];
-
-					if (!bang.hitTestObject(that)) {
-						continue;
+						if (!bang.hitTestObject(that)) {
+							continue;
+						}
 					}
-				}
-				for (var j = 0, len = _game.qiangs.length; j < len; j++) {
-					qiang = _game.qiangs[j];
+					for (var j = 0, len = _game.qiangs.length; j < len; j++) {
+						qiang = _game.qiangs[j];
 
-					if (!qiang.hitTestObject(that)) {
-						continue;
+						if (!qiang.hitTestObject(that)) {
+							continue;
+						}
 					}
-				}
-
-				if (i == len && j == len && that.vx == 0 && that.vy == 0) {
-					that.vx = 2 + Math.random();
-					that.vy = 2 + Math.random();
-				}
-
-				_game.playerArr.forEach(function (player) {
-					if (player.hitTestObject(that)) {
-						Event.fire("playerDied", {
-							player: player
-						});
+					if (i == len && j == len && that.vx == 0 && that.vy == 0) {
+						that.vx = 2 + Math.random();
+						that.vy = 2 + Math.random();
 					}
-				});
+
+					_game.playerArr.forEach(function (player) {
+						if (player.hitTestObject(that)) {
+							Event.fire("playerDied", {
+								player: player
+							});
+						}
+					});
 
 
-				this.x += this.vx;
-				this.y += this.vy;
+					this.x += this.vx;
+					this.y += this.vy;
 
-				that.lastVx = that.vx;
-				that.lastVy = that.vy;
+					that.lastVx = that.vx;
+					that.lastVy = that.vy;
+				}
 			}
 		}
 	});

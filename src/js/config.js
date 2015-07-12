@@ -6,12 +6,16 @@ KISSY.add("kill/config", function(S, utils){
             height:600
         },
         imgPath:__killPath + "img/",
-        fps:60
+        fps:60,
+        showHit:false,
+        god:false
     };
 
     //reset config
     S.each([
-        "fps"
+        "fps",
+        "showHit",
+        "god"
     ], function(key){
         if(keys[key] !== undefined){
             config[key] = keys[key];

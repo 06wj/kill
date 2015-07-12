@@ -82,7 +82,7 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
             var playerArr = this.playerArr = [];
             var player = window._player = new Player({
-                x:150,
+                x:50,
                 y:300,
                 playerNum:0
             });
@@ -98,7 +98,34 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             playerArr.push(player);
 
 
+	        var monsterArr = this.monsterArr = [];
+	        var m = new Monster({
+		        x: 500, y: 100
+	        });
+	        m.state = MonsterState.WAKE;
+	        this.stage.addChild(m);
+	        monsterArr.push(m);
 
+	        var m1 = new Monster({
+		        x: 200, y: 110
+	        });
+	        m1.state = MonsterState.WAKE;
+	        this.stage.addChild(m1);
+	        monsterArr.push(m1);
+
+	        var m2 = new Monster({
+		        x: 200, y: 120
+	        });
+	        m2.state = MonsterState.WAKE;
+	        this.stage.addChild(m2);
+	        monsterArr.push(m2);
+
+	        var m3 = new Monster({
+		        x: 200, y: 200
+	        });
+	        m3.state = MonsterState.WAKE;
+	        this.stage.addChild(m3);
+	        monsterArr.push(m3);
 
 
             var bgTop = new Bitmap({
@@ -153,34 +180,6 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             stage.addChild(this.hengRects[3]);
             stage.addChild(this.shuRects[2]);
             stage.addChild(this.shuRects[3]);
-
-	        this.qiangs = [this.hengRects[2],this.hengRects[3],this.shuRects[2],this.shuRects[3]];
-
-
-	        var monsterArr = this.monsterArr = [];
-	        var m = new Monster({
-		        x: 10, y: 200
-	        });
-	        this.stage.addChild(m);
-	        monsterArr.push(m);
-
-	        var m1 = new Monster({
-		        x: 200, y: 110
-	        });
-	        this.stage.addChild(m1);
-	        monsterArr.push(m1);
-
-	        var m2 = new Monster({
-		        x: 200, y: 120
-	        });
-	        this.stage.addChild(m2);
-	        monsterArr.push(m2);
-
-	        var m3 = new Monster({
-		        x: 200, y: 200
-	        });
-	        this.stage.addChild(m3);
-	        monsterArr.push(m3);
         },
         checkCollision:function(){
             var that = this;

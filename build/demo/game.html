@@ -32,16 +32,28 @@
             margin-top:-300px;
             width: 1000px;
             height: 600px;
-            background-color: #aaa;
+        }
+
+        #loading{
+            position:absolute;
+            width: 1000px;
+            height: 600px;
+            line-height: 600px;
+            font-size:40px;
+            text-align: center;
+            color:#fff;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div id="loading"></div>
         <div id="startBg"></div>
         <div id="game"></div>
     </div>
-    <script src="http://g.alicdn.com/kissy/k/1.4.7/seed-min.js"></script>
+    <!-- <script src="http://g.alicdn.com/kissy/k/1.4.7/seed-min.js"></script> -->
+    <script src="../kissy/seed-min.js"></script>
     <script src="../src/lib/hilo.js"></script>
     <script>
     var __killPath = "../src/";

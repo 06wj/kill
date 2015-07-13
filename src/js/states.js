@@ -35,12 +35,6 @@ KISSY.add("kill/states", function(){
                     y: 500,
                     type:"normal",
                     isMove:false
-                },
-                {
-                    x: 850,
-                    y: 500,
-                    type:"trap",
-                    isMove:false
                 }
             ],
             players:[{

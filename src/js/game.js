@@ -1,4 +1,4 @@
-KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster, Background, states){
+KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Bang, Monster, Background, states, loading){
     var Stage = Hilo.Stage;
     var Ticker = Hilo.Ticker;
     var Container = Hilo.Container;
@@ -12,7 +12,9 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
             this.gameContainer = gameContainer;
             this._bindEvent();
             input.init();
+            loading.init();
             resource.load();
+            mediator.fire("gameLoadStart");
 
             this.top = 51;
             this.left = 20;
@@ -268,5 +270,5 @@ KISSY.add("kill/game", function(S, resource, mediator, config, input, Player, Ba
 
     return game;
 }, {
-    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster", "kill/background", "kill/states"]
+    requires:["kill/resource", "kill/mediator", "kill/config", "kill/input", "kill/player", "kill/bang","kill/monster", "kill/background", "kill/states", "kill/loading"]
 });

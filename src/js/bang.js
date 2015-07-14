@@ -20,8 +20,6 @@ KISSY.add("kill/bang", function(S, resource, config){
             else{
                 this._initHeng(len);
             }
-
-
         },
         onUpdate:function(){
             this.x += this.vx;
@@ -46,15 +44,15 @@ KISSY.add("kill/bang", function(S, resource, config){
             }
         },
         _initHeng:function(len){
-            this.width = len + 34;
-            this.height = 20;
+            this.width = len + 40;
+            this.height = 30;
             if(config.showHit){
                 this.background = "rgba(255,0,0,.3)";
             }
             this.vx = this.vy = 0;
             this.display = new Container({
-                x:0,
-                y:-25
+                x:4,
+                y:-20
             });
             this.topContainer = new Container();
             this.bottomContainer = new Container();
@@ -141,15 +139,15 @@ KISSY.add("kill/bang", function(S, resource, config){
             this.topContainer.addChild(start);
         },
         _initShu:function(len){
-            this.width = 15;
-            this.height = len + 34;
+            this.width = 20;
+            this.height = len + 40;
             if(config.showHit){
                 this.background = "rgba(255,0,0,.3)";
             }
             this.vx = this.vy = 0;
             this.display = new Container({
-                x:0,
-                y:0
+                x:3,
+                y:3
             });
             this.topContainer = new Container();
             this.bottomContainer = new Container();

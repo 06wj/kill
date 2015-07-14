@@ -143,8 +143,18 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                 var bangTop = bang.y;
                 var bangBottom = bang.y + bang.height;
 
+                var nearOffset = 20;
+                var bangNearLeft = bangLeft - nearOffset;
+                var bangNearRight = bangRight + nearOffset;
+                var bangNearTop = bangTop - nearOffset;
+                var bangNearBottom = bangBottom + nearOffset;
+
+                if(left <= bangNearRight && bangNearLeft <= right && top <= bangNearBottom && bangNearTop <= bottom){
+                    bang["lastNear" + that.playerNum] = that;
+
+                }
+
                 if(bang.hitTestObject(that)){
-                    bang["lastHit" + that.playerNum] = that;
                     if(top != bangBottom && bottom != bangTop){
                         if(right > bangLeft && left < bangLeft){
                             if(that.vx > 0 || bang.lastVx < 0){
@@ -190,7 +200,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                     }
                 }
                 else{
-                    if(bang["lastHit" + that.playerNum] == that){
+                    if(bang["lastNear" + that.playerNum] == that){
                         if(isHold){
                             if(top != bangBottom && bottom != bangTop){
                                 if(left >= bangRight && that.vx > 0){
@@ -210,7 +220,7 @@ KISSY.add("kill/player", function(S, resource, input, mediator, config){
                             }
                         }
                         else{
-                            bang["lastHit" + that.playerNum] = false;
+                            bang["lastNear" + that.playerNum] = false;
                         }
                     }
                 }

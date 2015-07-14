@@ -69,14 +69,21 @@
         }
     });
     KISSY.use("kill/game", function(S, game){
-        document.body.onclick = function(){
-            document.getElementById("startBg").style.background = "url(../src/img/infoBg.jpg)";
+        if(location.search.indexOf("noStart") > -1){
+            document.getElementById("startBg").style.display = "none";
+            game.init(document.getElementById("game"));
+        }
+        else{
             document.body.onclick = function(){
-                document.body.onclick = null;
-                document.getElementById("startBg").style.display = "none";
-                game.init(document.getElementById("game"));
+                document.getElementById("startBg").style.background = "url(../src/img/infoBg.jpg)";
+                document.body.onclick = function(){
+                    document.body.onclick = null;
+                    document.getElementById("startBg").style.display = "none";
+                    game.init(document.getElementById("game"));
+                }
             }
         }
+
     });
     </script>
 </body>

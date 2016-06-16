@@ -1,1 +1,0 @@
-KISSY.add("kill/background",function(i,t){var a=Hilo.Class.create({Extends:Hilo.Container,constructor:function(i){Hilo.Container.call(this,i),this.display=new Hilo.Bitmap({image:t.get("road")}),this.addChild(this.display)}});return a},{requires:["kill/resource"]});

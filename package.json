@@ -17,12 +17,17 @@
   },
   "main": "gulpfiles.js",
   "devDependencies": {
+    "browserify": "^13.0.1",
     "del": "^1.2.0",
-    "gulp": "~3.8.7",
+    "gulp": "~3.9.x",
     "gulp-concat": "~2.3.4",
+    "gulp-if": "^2.0.1",
     "gulp-imagemin": "^2.3.0",
     "gulp-pngmin": "^0.1.4",
     "gulp-uglify": "~0.3.1",
-    "merge-stream": "^0.1.8"
+    "merge-stream": "^0.1.8",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
   }
 }

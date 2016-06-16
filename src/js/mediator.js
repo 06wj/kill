@@ -1,6 +1,6 @@
-KISSY.add("kill/mediator", function(S, event){
-    var mediator = S.merge({}, event.Target);
-    return mediator;
-},{
-    requires:["event"]
-});
+var config = require('./config');
+
+var mediator = Hilo.copy({}, Hilo.EventMixin);
+
+config.window('mediator', mediator);
+module.exports = mediator;

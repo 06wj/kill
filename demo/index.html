@@ -52,40 +52,10 @@
         <div id="startBg"></div>
         <div id="game"></div>
     </div>
-    <!-- <script src="http://g.alicdn.com/kissy/k/1.4.7/seed-min.js"></script> -->
-    <script src="../../kissy/seed-min.js"></script>
-    <script src="../src/lib/hilo.js"></script>
     <script>
-    var __killPath = "../src/";
-    KISSY.config({
-        packages: {
-            "kill": {
-                base: __killPath + "js/",
-                charset: "utf-8",
-                debug: true,
-                ignorePackageNameInUri: true,
-                combine:false
-            }
-        }
-    });
-    KISSY.use("kill/game", function(S, game){
-        if(location.search.indexOf("noStart") > -1){
-            document.getElementById("startBg").style.display = "none";
-            game.init(document.getElementById("game"));
-        }
-        else{
-            document.body.onclick = function(){
-                document.getElementById("startBg").style.background = "url(../src/img/infoBg.jpg)";
-                document.body.onclick = function(){
-                    document.body.onclick = null;
-                    document.getElementById("startBg").style.display = "none";
-                    game.init(document.getElementById("game"));
-                }
-            }
-        }
-
-    });
+    var __killPath = "../build/";
     </script>
+    <script src="../build/app.js"></script>
 </body>
 </html>
 

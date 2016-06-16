@@ -13,8 +13,12 @@ var watchify = require('watchify');
 
 var isBuild = true;
 gulp.task('clean', function(cb){
-    cb();
-    // del(['build/'], cb);
+    if(isBuild){
+        del(['build/'], cb);
+    }
+    else{
+        cb();
+    }
 });
 
 gulp.task('copy', ['clean'], function() {

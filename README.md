@@ -1,7 +1,7 @@
 # kill 井杀
 
 ### demo
-[./demo/index.html](http://06wj.github.io/kill/demo/index.html)
+[./demo/index.html](http://06wj.github.io/kill/demo/game.html)
 
 ### build
 
